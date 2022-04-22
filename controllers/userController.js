@@ -1,6 +1,6 @@
 // helpers
 const bcrypt = require('bcrypt');
-const prisma = require('../database/client');
+const prisma = require('../config/client');
 const validate = require('../utils/validation');
 
 
@@ -73,7 +73,72 @@ const getEmployee = async (req, res) => {
     }
 }
 
+const updateUserByUser = async (req, res) => {
+    const { firstname, lastname, nic, contact_no, email, birthday } = req.body;
+
+    const user_id = req.user_id;
+
+    const validation = validate.update_user_validation({ firstname, lastname, nic, contact_no, email, birthday });
+
+    if (validation.error) {
+        return res.status(400).json({
+            "message": validation.error.details
+        });
+    }
+
+    const foundAuth = await prisma.Auth.findUnique({
+        where: {
+            id: user_id
+        }
+    });
+
+    const foundUser = await prisma.User.findUnique({
+        where: {
+            user_id: user_id
+        }
+    });
+
+    if (!foundAuth || !foundUser) {
+        return res.status(404).json({
+            "message": `User :${user_id} does not exist...`
+        });
+    }
+
+    try {
+        const updateUser = await prisma.User.update({
+            where: {
+                user_id: user_id
+            },
+            data: {
+                firstname: firstname,
+                lastname: lastname,
+                nic: nic,
+                contact_no: contact_no,
+                email: email,
+                birthday: new Date(birthday)
+            }
+        });
+
+        console.log("update user", updateUser)
+
+        // const isProfileComplete = 
+
+        return res.status(200).json({
+            status: 'success',
+            data: updateUser
+        })
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({
+            status: 'error',
+            message: error.message
+        });
+    }
+
+}
+
 module.exports = {
     getAllEmpoyees,
-    getEmployee
+    getEmployee,
+    updateUserByUser
 }

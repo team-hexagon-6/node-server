@@ -2,8 +2,12 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 const cookieParser = require('cookie-parser');
-const client = require('./database/client');
-// const client = PrismaClient()
+const client = require('./config/client');
+
+const credentials = require('./middlewares/credentials');
+const cors = require('cors');
+const coresOptions = require('./config/corsOptions');
+const verifyJWT = require('./middlewares/verifyJWT');
 
 const PORT = process.env.PORT || 3500;
 
@@ -11,6 +15,8 @@ const PORT = process.env.PORT || 3500;
 
 
 // parsing the incoming data
+app.use(credentials);
+app.use(cors(coresOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -19,11 +25,11 @@ app.use(cookieParser());
 
 
 // routes
-app.use('/', require('./routes/site'));
 app.use('/auth', require('./routes/auth'));
+app.use('/', require('./routes/site'));
 
 // Routes with verifyJWT
-// app.use(verifyJWT)
+app.use(verifyJWT)
 app.use('/api', require('./routes/api/user'));
 
 
