@@ -7,7 +7,7 @@ export const users =[
         contact_no: '0771234567',
         email:  'admin@gmail.com',
         birthday: new Date('2020-01-01'),
-        active: true,
+       
     },
     {
         user_id:"23334343E",
@@ -17,7 +17,7 @@ export const users =[
         contact_no: '0771234567',
         email:  'examiner@gmail.com',
         birthday: new Date('2020-01-01'),
-        active: true,
+       
     },
     {
         user_id:"23334343D",
@@ -27,6 +27,6 @@ export const users =[
         contact_no: '0771234567',
         email:  'doctor@gmail.com',
         birthday: new Date('2020-01-01'),
-        active: true,
+        
     }
 ]

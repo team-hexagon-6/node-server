@@ -1,4 +1,4 @@
-const prisma = require('../database/client');
+const prisma = require('../config/client');
 
 import {userTypes} from './seed/userTypes'
 import {auths} from './seed/auths'
