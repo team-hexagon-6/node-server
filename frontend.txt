@@ -1,0 +1,22 @@
+1. use dev brach for your work 
+2. don't fucking do any changes to backend 
+3. don't commit any changes to backend 
+4. don't push any changes to backend
+
+// for api calling
+1. delete your database 
+2. npm install : for install  node modules do everytime when you refresh branch
+3. npx prisma db push : create new database 
+4. npx prisma db seed : seed data to database
+5. npm start : start server
+
+
+don't do the fucking 👶 things
+don't do the fucking 👶 things
+don't do the fucking 👶 things
+don't do the fucking 👶 things
+
+It will waste your and our fucking ⏲️
+
+🔥🔥🔥NOCTUS CODER 🔥🔥🔥
+

@@ -4,6 +4,8 @@ const prisma = require('../config/client');
 const validate = require('../utils/validation');
 const token = require('../utils/token');
 
+const allowedRoles = require('../config/allowedRoles');
+
 
 // functions 
 const handleNewUser = async (req, res) => {
@@ -237,6 +239,7 @@ const getAuthObject = async (auth) => {
         active: auth.active,
         logged_at: auth.logged_at,
         complete_profile: auth.complete_profile,
+        role: allowedRoles[userType.name],
     }
 }
 
