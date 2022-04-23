@@ -10,6 +10,7 @@ const getAccessToken = (auth) => {
             "logged_at": auth.logged_at,
             "active": auth.active,
             "profile_complete": auth.complete_profile,
+            "role": auth.role
         },
         process.env.ACCESS_TOKEN_SECRET,
         { expiresIn: '1d' }
