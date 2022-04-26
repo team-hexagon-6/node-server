@@ -3,6 +3,8 @@ const prisma = require('../config/client');
 import {userTypes} from './seed/userTypes'
 import {auths} from './seed/auths'
 import {users} from './seed/users'
+import {genderTypes} from './seed/genderTypes'
+import {patients} from './seed/patients'
 
 const loadData = async () => {
 
@@ -22,8 +24,16 @@ const loadData = async () => {
     await prisma.userType.deleteMany();
     console.log("Deleted records in userType table");
 
+    await prisma.Patient.deleteMany();
+    console.log("Deleted records in Patient table");
+
+    await prisma.genderType.deleteMany();
+    console.log("Deleted records in genderType table");
+
     await prisma.$queryRaw`ALTER TABLE userType AUTO_INCREMENT = 1`;
     console.log("reset userType auto increment to 1");
+    await prisma.$queryRaw`ALTER TABLE genderType AUTO_INCREMENT = 1`;
+    console.log("reset genderType auto increment to 1");
     ////////////////////////////////////////////////////////////////////
 
 
@@ -42,6 +52,16 @@ const loadData = async () => {
         data: users
     });
     console.log("Added user data");
+
+    await prisma.genderType.createMany({
+        data: genderTypes
+    });
+    console.log("Added genderType data");
+
+    await prisma.Patient.createMany({
+        data: patients
+    });
+    console.log("Added patient data");
     /////////////////////////////////////////////////////////////////////
 
 
