@@ -137,8 +137,146 @@ const updateUserByUser = async (req, res) => {
 
 }
 
+const updatePasswordByUser = async (req, res) => {
+    const { new_password, old_password } = req.body;
+    const user_id = req.user_id;
+
+    const validation = validate.update_password_validation({ new_password, old_password, user_id });
+
+    if (validation.error) {
+        return res.status(400).json({
+            "message": validation.error.details
+        })
+    }
+
+    const foundAuth = await prisma.Auth.findUnique({
+        where: {
+            id: user_id
+        }
+    });
+
+    if (!foundAuth) {
+        return res.status(404).json({
+            "message": `User :${user_id} does not exist...`
+        })
+    }
+    const isMatch = await bcrypt.compare(old_password, foundAuth.password);
+
+    if (!isMatch) {
+        return res.status(400).json({
+            "message": `Old password is incorrect...`
+        })
+    }
+
+    try {
+        const hashedPwd = await bcrypt.hash(new_password, 10);
+
+        const result = await prisma.Auth.update({
+            where: {
+                id: user_id
+            },
+            data: {
+                password: hashedPwd,
+            }
+        });
+
+        console.log(result);
+
+        return res.status(200).json({
+            status: 'password update successfully',
+        });
+
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({
+            status: 'error',
+        })
+    }
+
+}
+
+const updatePasswordByAdmin = async (req, res) => {
+    const { new_password, user_id } = req.body;
+    const validation = validate.password_validation({ password: new_password, user_id });
+
+    if (validation.error) {
+        return res.status(400).json({
+            "message": validation.error.details
+        });
+    }
+
+    const foundAuth = await prisma.Auth.findUnique({
+        where: {
+            id: user_id
+        }
+    })
+
+    if (!foundAuth) {
+        return res.status(404).json({
+            "message": `User :${user_id} does not exist...`
+        });
+    }
+
+    try {
+        const hashedPwd = await bcrypt.hash(new_password, 10);
+
+        const result = await prisma.Auth.update({
+            where: {
+                id: user_id
+            },
+            data: {
+                password: hashedPwd,
+            }
+        });
+
+        console.log(result);
+
+        return res.status(200).json({
+            status: 'password update successfully',
+        });
+    } catch (error) {
+        // console.log(error)
+        return res.status(500).json({
+            status: 'error',
+        });
+    }
+}
+
+const getUser = async (req, res) => {
+    const user_id = req.user_id;
+
+    const validation = validate.get_user_validation({ user_id });
+
+    if (validation.error) {
+        return res.status(400).json({
+            "message": validation.error.details
+        });
+    }
+
+    const foundUser = await prisma.User.findUnique({
+        where: {
+            user_id: user_id
+        }
+    });
+
+    if (!foundUser) {
+        return res.status(404).json({
+            "message": `User :${user_id} does not exist...`
+        })
+    }
+
+    return res.status(200).json({
+        status: 'success',
+        data: foundUser
+    });
+}
+
 module.exports = {
     getAllEmpoyees,
     getEmployee,
-    updateUserByUser
+    updateUserByUser,
+    updatePasswordByUser,
+    updatePasswordByAdmin,
+    getUser
+
 }

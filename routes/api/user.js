@@ -7,10 +7,9 @@ const verifyRoles = require('../../middlewares/verifyRoles');
 router
     .get('/get-employees', verifyRoles(process.env.ADMIN_ROLE), userController.getAllEmpoyees)
     .get('/get-employee/:id', verifyRoles(process.env.ADMIN_ROLE), userController.getEmployee)
-    .post('/update-profile', verifyRoles(
-        process.env.ADMIN_ROLE,
-        process.env.DOCTOR_ROLE,
-        process.env.EXAMINER_ROLE),
-        userController.updateUserByUser);
+    .post('/update-profile', userController.updateUserByUser)
+    .post('/update-password-by-admin', verifyRoles(process.env.ADMIN_ROLE), userController.updatePasswordByAdmin)
+    .post('/update-password-by-user', userController.updatePasswordByUser)
+    .get('/get-user', userController.getUser);
 
 module.exports = router;    
