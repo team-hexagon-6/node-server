@@ -7,7 +7,7 @@ const validate = require('../utils/validation');
 // functions 
 const getAllEmpoyees = async (req, res) => {
     try {
-        const userTypesIDs = await prisma.userType.findMany({
+        const userTypesIDs = await prisma.UserType.findMany({
             where: {
                 name: {
                     in: ['examiner', 'doctor']
