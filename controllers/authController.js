@@ -32,7 +32,7 @@ const handleNewUser = async (req, res) => {
 
         const hashedPwd = await bcrypt.hash(password, 10);
 
-        const userType = await prisma.userType.findUnique({
+        const userType = await prisma.UserType.findUnique({
             where: {
                 name: user_type
             }
@@ -52,7 +52,7 @@ const handleNewUser = async (req, res) => {
                     user_type_id: userType.id
                 },
             }),
-            prisma.user.create({
+            prisma.User.create({
                 data: {
                     user_id: user_id,
                 }
@@ -227,7 +227,7 @@ const handleLogout = async (req, res) => {
 }
 
 const getAuthObject = async (auth) => {
-    const userType = await prisma.userType.findUnique({
+    const userType = await prisma.UserType.findUnique({
         where: {
             id: auth.user_type_id
         }

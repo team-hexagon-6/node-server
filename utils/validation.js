@@ -60,6 +60,42 @@ const get_user_validation = (data) => {
     return schema.validate(data, { abortEarly: false });
 }
 
+// patient_id, test_id ,image_string,test_type
+const do_test_validation = (data) => {
+    const schema = Joi.object({
+        patient_id: Joi.string().min(5).max(25).required(),
+        test_id: Joi.string().min(5).max(192).required(),
+        image_string: Joi.string().required(),
+        test_type: Joi.string().valid('spiral', 'wave').required()
+    })
+
+    return schema.validate(data, { abortEarly: false });
+}
+
+const get_test_validation = data => {
+    const schema = Joi.object({
+        test_id: Joi.string().min(5).max(192).required()
+    })
+
+    return schema.validate(data, { abortEarly: false });
+}
+
+const skip_take_validation = (data) => {
+    const schema = Joi.object({
+        skip: Joi.number().required(),
+        take: Joi.number().required()
+    })
+
+    return schema.validate(data, { abortEarly: false });
+}
+
+const get_test_record_validation = (data) => {
+    const schema = Joi.object({
+        test_record_id: Joi.number().required()
+    })
+
+    return schema.validate(data, { abortEarly: false });
+}
 
 module.exports = {
     register_vaidation,
@@ -67,5 +103,10 @@ module.exports = {
     update_user_validation,
     update_password_validation,
     password_validation,
-    get_user_validation
+    get_user_validation,
+    do_test_validation,
+    get_test_validation,
+    skip_take_validation,
+    get_test_record_validation
+
 }

@@ -9,9 +9,12 @@ const cors = require('cors');
 const coresOptions = require('./config/corsOptions');
 const verifyJWT = require('./middlewares/verifyJWT');
 
+const multer = require('multer');
+
 const PORT = process.env.PORT || 3500;
 
 // prisma.connect();
+
 
 
 // parsing the incoming data
@@ -31,6 +34,9 @@ app.use('/', require('./routes/site'));
 // Routes with verifyJWT
 app.use(verifyJWT)
 app.use('/api', require('./routes/api/user'));
+// add multipart file access
+app.use(multer().array())
+app.use('/api/test', require('./routes/api/test'));
 
 
 
