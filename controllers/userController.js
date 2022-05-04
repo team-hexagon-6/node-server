@@ -6,6 +6,15 @@ const validate = require('../utils/validation');
 
 // functions 
 const getAllEmpoyees = async (req, res) => {
+    const { skip, take } = req.query;
+    const validation = validate.skip_take_validation({ skip, take });
+
+    if (validation?.error) {
+        return res.status(400).json({
+            "message": validation.error.details
+        });
+    }
+
     try {
         const userTypesIDs = await prisma.UserType.findMany({
             where: {
@@ -15,7 +24,9 @@ const getAllEmpoyees = async (req, res) => {
             },
             select: {
                 id: true
-            }
+            },
+            skip: parseInt(skip),
+            take: parseInt(take)
         });
         // console.log(userTypesIDs)
         // console.log()
