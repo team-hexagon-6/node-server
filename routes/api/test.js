@@ -9,6 +9,7 @@ router
     .get('/get-test/:test_id', verifyRoles(process.env.EXAMINER_ROLE, process.env.DOCTOR_ROLE), testController.getTest)
     .get('/get-tests', verifyRoles(process.env.EXAMINER_ROLE, process.env.DOCTOR_ROLE), testController.getAllTests)
     .get('/get-test-record/:test_record_id', verifyRoles(process.env.EXAMINER_ROLE, process.env.DOCTOR_ROLE), testController.getTestRecord)
-    .get('/get-test-records', verifyRoles(process.env.EXAMINER_ROLE, process.env.DOCTOR_ROLE), testController.getAllTestRecords);
+    .get('/get-test-records', verifyRoles(process.env.EXAMINER_ROLE, process.env.DOCTOR_ROLE), testController.getAllTestRecords)
+    .get('/test-types', verifyRoles(process.env.EXAMINER_ROLE), testController.getTestTypes);
 
 module.exports = router;  

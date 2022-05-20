@@ -16,29 +16,66 @@ const getAllEmpoyees = async (req, res) => {
     }
 
     try {
-        const userTypesIDs = await prisma.UserType.findMany({
+        // const userTypesIDs = await prisma.UserType.findMany({
+        //     where: {
+        //         name: {
+        //             in: ['examiner', 'doctor']
+        //         }
+        //     },
+        //     select: {
+        //         id: true
+        //     },
+
+        // });
+        // console.log(userTypesIDs)
+        // console.log()
+        // const employees = await prisma.User.findMany({
+        //     where: {
+        //         auth: {
+        //             user_type_id: {
+        //                 in: userTypesIDs.map(userType => userType.id)
+        //             }
+        //         }
+        //     },
+        //     skip: parseInt(skip),
+        //     take: parseInt(take)
+        // });
+
+        const employees = await prisma.User.findMany({
             where: {
-                name: {
-                    in: ['examiner', 'doctor']
+                NOT: {
+                    auth: {
+                        usertype: {
+                            slug: process.env.ADMIN_USER_TYPE_SLUG
+                        }
+                    }
                 }
             },
             select: {
-                id: true
+                firstname: true,
+                lastname: true,
+                nic: true,
+                contact_no: true,
+                email: true,
+                birthday: true,
+                created_at: true,
+                auth: {
+                    select: {
+                        id: true,
+                        logged_at: true,
+                        complete_profile: true,
+                        usertype: {
+                            select: {
+                                name: true,
+                            }
+                        }
+                    }
+                }
             },
             skip: parseInt(skip),
             take: parseInt(take)
         });
-        // console.log(userTypesIDs)
-        // console.log()
-        const employees = await prisma.User.findMany({
-            where: {
-                auth: {
-                    user_type_id: {
-                        in: userTypesIDs.map(userType => userType.id)
-                    }
-                }
-            },
-        });
+
         // console.log(employees)
         return res.status(200).json({
             status: 'success',

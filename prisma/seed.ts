@@ -44,6 +44,7 @@ const loadData = async () => {
 
     await prisma.TestResult.deleteMany();
     console.log("Deleted records in testResult table");
+
   
     await prisma.$queryRaw`ALTER TABLE UserType AUTO_INCREMENT = 1`;
     console.log("reset userType auto increment to 1");
@@ -51,6 +52,7 @@ const loadData = async () => {
     await prisma.$queryRaw`ALTER TABLE GenderType AUTO_INCREMENT = 1`;
     console.log("reset genderType auto increment to 1");
   
+
     await prisma.$queryRaw`ALTER TABLE Test AUTO_INCREMENT = 1`;
     console.log("reset test auto increment to 1");
     ////////////////////////////////////////////////////////////////////

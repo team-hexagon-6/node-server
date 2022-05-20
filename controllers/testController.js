@@ -5,7 +5,6 @@ const axios = require('axios');
 const FormData = require('form-data');
 
 
-const { writeFileSync } = require("fs")
 
 // functions
 const handleNewTest = async (req, res) => {
@@ -67,6 +66,20 @@ const doTest = async (req, res) => {
         });
     }
 
+    const testType = await prisma.TestType.findUnique({
+        where: {
+            slug: test_type
+        }
+    });
+
+    if (!testType) {
+        return res.status(400).json({
+            "message": `Test type does not exist...`
+        });
+    }
+
+
+
     try {
         // decode base64 image string into image file 
         // image validation
@@ -99,7 +112,7 @@ const doTest = async (req, res) => {
 
     const formData = new FormData();
     formData.append('image', image_string);
-    formData.append('type', test_type);
+    formData.append('type', testType.name);
 
 
     const apiEndPoint = `${process.env.ML_DOMAIN}/api?user_id=${process.env.ML_USER_ID}&access_token=${process.env.ML_ACCESS_TOKEN}`;
@@ -277,7 +290,7 @@ const getAllTestRecords = async (req, res) => {
     });
 
     const handledTestRecords = await handleViewTestRecords(testRecords);
-    // console.log(handledTestRecords)
+    console.log("view test records lenght :", handledTestRecords.length);
 
     return res.status(200).json({
         "message": 'success',
@@ -301,9 +314,25 @@ const handleViewTestRecords = async (test_records) => {
             test_type: mapTestTypes[record.test_type_id],
         }
     });
-    console.log(test_records);
     return test_records;
 }
+
+const getTestTypes = async (req, res) => {
+    const testTypes = await prisma.TestType.findMany();
+    console.log("test_types :", testTypes);
+
+    if (testTypes.length <= 0) {
+        return res.status(500).json({
+            "message": 'No test types found...'
+        });
+    }
+
+    return res.status(200).json({
+        "message": 'success',
+        "testTypes": testTypes
+    });
+}
+
 
 const mappingTypes = (typesArray) => {
     const mapObject = {};
@@ -315,11 +344,13 @@ const mappingTypes = (typesArray) => {
     return mapObject;
 }
 
+
 module.exports = {
     handleNewTest,
     doTest,
     getTest,
     getAllTests,
     getTestRecord,
-    getAllTestRecords
+    getAllTestRecords,
+    getTestTypes
 }

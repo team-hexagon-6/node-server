@@ -1,10 +1,12 @@
 export const testResults =[
     {
         id:0,
-        name:'healthy'
+        name:'healthy',
+        slug:'he_slug'
     },
     {
         id:1,
-        name:'disease'
+        name:'disease',
+        slug:'di_slug'
     }
 ]
