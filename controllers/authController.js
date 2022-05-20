@@ -13,6 +13,7 @@ const handleNewUser = async (req, res) => {
 
     const result = validate.register_vaidation({ user_id, user_type, password });
     if (result?.error) {
+        console.log("error :", result.error);
         return res.status(400).json({
             "message": result.error.details
         });
@@ -24,22 +25,21 @@ const handleNewUser = async (req, res) => {
         },
     });
 
+    if (duplicateUser) {
+        return res.status(409).json({ "message": `User :${user_id} already exists...` });
+    }
+
     try {
-
-        if (duplicateUser) {
-            return res.status(409).json({ "message": `User :${user_id} already exists...` });
-        }
-
         const hashedPwd = await bcrypt.hash(password, 10);
 
         const userType = await prisma.UserType.findUnique({
             where: {
-                name: user_type
+                slug: user_type
             }
         });
 
         if (!userType) {
-            return res.status(400).json({ "message": `User type :${user_type} does not exist...` });
+            return res.status(400).json({ "message": `User type does not exist...` });
         }
         // console.log("user type", userType);
 
@@ -59,26 +59,6 @@ const handleNewUser = async (req, res) => {
             })
         ])
 
-
-        // const newUser = await prisma.Auth.create({
-        //     data: {
-        //         id: user_id,
-        //         password: hashedPwd,
-        //         user_type_id: userType.id
-        //     },
-
-        // })
-
-
-
-
-        // const user = await prisma.Auth.create({
-        //     data: {
-        //         id: user_id,
-        //         password: hashedPwd,
-
-        //     },
-        // });
 
         console.log("new auth", newAuth);
         console.log("new user", newUser);
@@ -120,7 +100,6 @@ const handleLogin = async (req, res) => {
     if (!isMatch) {
         return res.status(400).json({ "message": `User :${user_id} password is incorrect...` });
     }
-
 
     // console.log(foundUser)
     // if(foundUser.active)
@@ -243,11 +222,36 @@ const getAuthObject = async (auth) => {
     }
 }
 
+const getUserTypes = async (req, res) => {
+    const userTypes = await prisma.UserType.findMany({
+        select: {
+            name: true,
+            slug: true,
+        },
+        where: {
+            NOT: {
+                slug: process.env.ADMIN_USER_TYPE_SLUG
+            }
+        }
+    });
+
+    console.log("user_types :", userTypes);
+    if (userTypes.length <= 0) {
+        return res.status(500).json({ "message": "User types not found" });
+    }
+
+    return res.status(200).json({
+        status: 'success',
+        data: userTypes
+    });
+}
+
 
 module.exports = {
     handleNewUser,
     handleLogin,
     handleLogout,
-    handleNewAccessToken
+    handleNewAccessToken,
+    getUserTypes
 }
 

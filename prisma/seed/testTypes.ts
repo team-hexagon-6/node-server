@@ -1,10 +1,12 @@
 export const testTypes =[
     {
         id:0,
-        name:'spiral'
+        name:'spiral',
+        slug:'sp_slug'
     },
     {
         id:1,
-        name:'wave'
+        name:'wave',
+        slug:'wa_slug'
     }
 ]

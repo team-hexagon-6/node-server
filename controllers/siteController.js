@@ -1,4 +1,5 @@
 
+const prisma = require('../config/client');
 
 const handleHomeImages = (req, res) => {
     res.status(200).json({

@@ -48,10 +48,12 @@ app.all('*', (req, res) => {
 })
 
 
+
 // start the server
 client.$connect(app.listen(PORT, () => {
     console.log(`Server started on port ${PORT}`);
 }));
+
 
 // app.listen(PORT, () => {
 //     console.log(`Server started on port ${PORT}`);
