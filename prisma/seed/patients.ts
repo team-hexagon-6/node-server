@@ -1,6 +1,6 @@
 export const patients =[
     {
-        id: '23334377A',
+        id: 'P23334377',
         firstname: 'patient_1',
         lastname: 'afdf',
         nic: '91234567v',
@@ -11,7 +11,7 @@ export const patients =[
        
     },
     {
-        id:"23334433E",
+        id:'P23334433',
         firstname: 'patient_2',
         lastname: 'examiner',
         nic: '91234567v',

@@ -12,6 +12,11 @@ model Test {
   id         String       @id @default(uuid())
   created_at DateTime?    @default(now())
   testrecord TestRecord[]
+
+  patient_id String  @db.VarChar(25)
+  patient    Patient @relation(fields: [patient_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "test_ibfk_23")
+
+  @@index([patient_id], map: "test_ibfk_23")
 }
 
 model Auth {
@@ -34,10 +39,10 @@ model TestRecord {
   examiner_id    String     @db.VarChar(25)
   test_result_id Int
   test_type_id   Int
-  user           User       @relation(fields: [examiner_id], references: [user_id], onDelete: Cascade, onUpdate: NoAction, map: "test_ibfk_2")
+  examiner       User       @relation(fields: [examiner_id], references: [user_id], onDelete: Cascade, onUpdate: NoAction, map: "test_ibfk_2")
   test           Test       @relation(fields: [test_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "test_ibfk_1")
-  testresult     TestResult @relation(fields: [test_result_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "test_record_ibfk_1")
-  testtype       TestType   @relation(fields: [test_type_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "test_ibfk_3")
+  test_result    TestResult @relation(fields: [test_result_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "test_record_ibfk_1")
+  test_type      TestType   @relation(fields: [test_type_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "test_ibfk_3")
 
   @@index([test_id], map: "test_ibfk_1")
   @@index([examiner_id], map: "test_ibfk_2")
@@ -47,7 +52,7 @@ model TestRecord {
 
 model TestResult {
   id         Int          @id
-  name       String       @db.VarChar(10)
+  name       String       @unique(map: "testResult_name") @db.VarChar(10)
   slug       String       @unique(map: "testResult_slug_key") @db.VarChar(10)
   testrecord TestRecord[]
 }
@@ -88,7 +93,7 @@ model Patient {
   email      String   @db.VarChar(255)
   birthday   DateTime @db.Date
 
-
+  test       Test[]
   created_at DateTime? @db.Timestamp(0)
 
   gender_type_id Int
@@ -97,8 +102,8 @@ model Patient {
 }
 
 model GenderType {
-  id   Int    @id @default(autoincrement())
-  name String @db.VarChar(10)
-  slug String @unique(map:"gender_type_slug_key") @db.VarChar(10)
+  id      Int       @id @default(autoincrement())
+  name    String    @db.VarChar(10)
+  slug    String    @unique(map: "gender_type_slug_key") @db.VarChar(10)
   patient Patient[]
 }

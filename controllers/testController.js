@@ -10,7 +10,7 @@ const FormData = require('form-data');
 const handleNewTest = async (req, res) => {
     const { patient_id } = req.body;
 
-    const validation = validate.new_test_validation({ patient_id });
+    const validation = validate.patient_id_validation({ patient_id });
 
     if (validation?.error) {
         return res.status(400).json({
@@ -49,12 +49,6 @@ const handleNewTest = async (req, res) => {
 }
 
 
-// const uploadImage = (req, res) => {
-//     const { patient_id, test_id } = req.body;
-
-//     const validation = validate.upload_image_validation({ patient_id, test_id });
-// }
-
 const doTest = async (req, res) => {
     const { patient_id, test_id, image_string, test_type } = req.body;
 
@@ -78,13 +72,8 @@ const doTest = async (req, res) => {
         });
     }
 
-
-
     try {
-        // decode base64 image string into image file 
-        // image validation
         Buffer.from(image_string, 'base64');
-        // writeFileSync("image.png", image)
     }
     catch (err) {
         console.log("Image is not base64 :", err.message);
@@ -94,8 +83,18 @@ const doTest = async (req, res) => {
     }
 
     // patient validation
-    // TODO: check if patient exists
 
+    const patient = await prisma.Patient.findUnique({
+        where: {
+            id: patient_id
+        }
+    });
+
+    if (!patient) {
+        return res.status(400).json({
+            "message": `Patient :${patient_id} does not exist...`
+        });
+    }
 
     // test validation
     const testFound = await prisma.Test.findUnique({
@@ -116,7 +115,7 @@ const doTest = async (req, res) => {
 
 
     const apiEndPoint = `${process.env.ML_DOMAIN}/api?user_id=${process.env.ML_USER_ID}&access_token=${process.env.ML_ACCESS_TOKEN}`;
-
+    console.log("apiEndPoint :", apiEndPoint);
     try {
         const result = await axios.post(
             apiEndPoint,
@@ -130,7 +129,7 @@ const doTest = async (req, res) => {
         console.log(result.data)
 
         // create new test record
-        const newTestRecord = await handlenNewTestRecord(result.data, test_id, req.user_id, patient_id);
+        const newTestRecord = await handlenNewTestRecord(result.data, test_id, req.user_id, patient_id, testType);
 
         console.log(newTestRecord);
 
@@ -148,23 +147,14 @@ const doTest = async (req, res) => {
 
 }
 
-const handlenNewTestRecord = async (data, test_id, examiner_id, patient_id) => {
-
-    // get test record types 
-    const testType = await prisma.TestType.findUnique({
-        where: {
-            name: data.typo
-        }
-    });
-    // console.log("test type :", testType);
-
+const handlenNewTestRecord = async (data, test_id, examiner_id, patient_id, testType) => {
     const testResult = await prisma.TestResult.findUnique({
         where: {
             name: data.disease
         }
     });
 
-    // FIXME: add patient id to test record
+
     // create new test record
     const newTestRecord = await prisma.TestRecord.create({
         data: {
@@ -199,6 +189,32 @@ const getTest = async (req, res) => {
     const test = await prisma.Test.findUnique({
         where: {
             id: test_id
+        },
+        include: {
+            testrecord: {
+                select: {
+                    id: true,
+                    examiner: {
+                        select: {
+                            user_id: true,
+                            firstname: true,
+                            lastname: true,
+                            email: true,
+                            contact_no: true,
+                        }
+                    },
+                    test_result: {
+                        select: {
+                            name: true
+                        }
+                    },
+                    test_type: {
+                        select: {
+                            name: true
+                        }
+                    },
+                }
+            }
         }
     });
 
@@ -214,8 +230,9 @@ const getTest = async (req, res) => {
     });
 }
 
-const getAllTests = async (req, res) => {
-    const { skip, take } = req.query;
+const getAllTestsForPatient = async (req, res) => {
+    const { skip, take, patient_id } = req.query;
+
 
     const validation = validate.skip_take_validation({ skip, take });
 
@@ -225,7 +242,30 @@ const getAllTests = async (req, res) => {
         });
     }
 
+    const validation2 = validate.patient_id_validation({ patient_id });
+    if (validation2?.error) {
+        return res.status(400).json({
+            "message": validation2.error.details
+        });
+    }
+
+    const patient = await prisma.Patient.findUnique({
+        where: {
+            id: patient_id
+        }
+    })
+
+    if (!patient) {
+        return res.status(400).json({
+            "message": `Patient :${patient_id} does not exist...`
+        })
+    }
+
+
     const tests = await prisma.Test.findMany({
+        where: {
+            patient_id: patient_id
+        },
         skip: parseInt(skip),
         take: parseInt(take)
     });
@@ -349,7 +389,7 @@ module.exports = {
     handleNewTest,
     doTest,
     getTest,
-    getAllTests,
+    getAllTestsForPatient,
     getTestRecord,
     getAllTestRecords,
     getTestTypes
