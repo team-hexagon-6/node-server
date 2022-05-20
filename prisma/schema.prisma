@@ -75,6 +75,7 @@ model UserType {
   name String @unique(map: "userType_name_key") @db.VarChar(10)
   auth Auth[]
 }
+
 model Patient {
   id         String   @id @db.VarChar(25)
   firstname  String   @db.VarChar(255)
@@ -88,12 +89,13 @@ model Patient {
   created_at DateTime? @db.Timestamp(0)
 
   gender_type_id Int
-  gender_type    genderType @relation(fields: [gender_type_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "patient_ibfk_2")
+  gender_type    GenderType @relation(fields: [gender_type_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "patient_ibfk_2")
 
 }
 
-model genderType {
+model GenderType {
   id   Int    @id @default(autoincrement())
-  name String @unique @db.VarChar(20)
+  name String @db.VarChar(10)
+  slug String @unique(map:"gender_type_slug_key") @db.VarChar(10)
   patient Patient[]
 }

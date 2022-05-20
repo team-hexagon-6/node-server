@@ -1,8 +1,10 @@
 export const genderTypes = [
     {
-        name: 'Male'
+        name: 'Male',
+        slug: 'hjkyr10'
     },
     {
-        name: 'Female'
+        name: 'Female',
+        slug: 'fgdgwru1'
     },
 ]
