@@ -1,5 +1,7 @@
 const prisma = require('../config/client');
 
+import {genderTypes} from './seed/genderTypes'
+import {patients} from './seed/patients'
 import {userTypes} from './seed/userTypes';
 import {auths} from './seed/auths';
 import {users} from './seed/users';
@@ -31,15 +33,25 @@ const loadData = async () => {
     await prisma.UserType.deleteMany();
     console.log("Deleted records in userType table");
 
+    await prisma.Patient.deleteMany();
+    console.log("Deleted records in Patient table");
+
+    await prisma.genderType.deleteMany();
+    console.log("Deleted records in genderType table");
+
     await prisma.TestType.deleteMany();
     console.log("Deleted records in testType table");
 
     await prisma.TestResult.deleteMany();
     console.log("Deleted records in testResult table");
 
-
+  
     await prisma.$queryRaw`ALTER TABLE UserType AUTO_INCREMENT = 1`;
     console.log("reset userType auto increment to 1");
+  
+    await prisma.$queryRaw`ALTER TABLE GenderType AUTO_INCREMENT = 1`;
+    console.log("reset genderType auto increment to 1");
+  
 
     await prisma.$queryRaw`ALTER TABLE Test AUTO_INCREMENT = 1`;
     console.log("reset test auto increment to 1");
@@ -62,6 +74,16 @@ const loadData = async () => {
     });
     console.log("Added user data");
 
+    await prisma.GenderType.createMany({
+        data: genderTypes
+    });
+    console.log("Added genderType data");
+
+    await prisma.Patient.createMany({
+        data: patients
+    });
+    console.log("Added patient data");
+  
     //////////  testType ///////////////
     await prisma.TestType.createMany({
         data:testTypes

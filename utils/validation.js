@@ -97,6 +97,19 @@ const get_test_record_validation = (data) => {
     return schema.validate(data, { abortEarly: false });
 }
 
+const new_patient_validation = (data) => {
+    const schema = Joi.object({
+        firstname: Joi.string().min(5).max(25).required(),
+        lastname: Joi.string().min(5).max(25).required(),
+        nic: Joi.string().required(),
+        contact_no: Joi.string().required(),
+        email: Joi.string().email().required(),
+        birthday: Joi.date().required()
+    })
+
+    return schema.validate(data, { abortEarly: false });
+}
+
 module.exports = {
     register_vaidation,
     login_validation,
@@ -107,6 +120,7 @@ module.exports = {
     do_test_validation,
     get_test_validation,
     skip_take_validation,
-    get_test_record_validation
+    get_test_record_validation,
+    new_patient_validation
 
 }
