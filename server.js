@@ -34,6 +34,7 @@ app.use('/', require('./routes/site'));
 // Routes with verifyJWT
 app.use(verifyJWT)
 app.use('/api', require('./routes/api/user'));
+app.use('/api/patient', require('./routes/api/patient'));
 // add multipart file access
 app.use(multer().array())
 app.use('/api/test', require('./routes/api/test'));
