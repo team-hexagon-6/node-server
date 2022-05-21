@@ -6,6 +6,12 @@ const validate = require('../utils/validation');
 
 // functions 
 const getAllEmpoyees = async (req, res) => {
+    const SLUG = process.env.ADMIN_USER_TYPE_SLUG;
+    if (!SLUG) {
+        console.log("ADMIN_USER_TYPE_SLUG is not set");
+        return res.status(500).json({ "message": "Internal server error" });
+    }
+
     const { skip, take } = req.query;
     const validation = validate.skip_take_validation({ skip, take });
 
@@ -46,7 +52,7 @@ const getAllEmpoyees = async (req, res) => {
                 NOT: {
                     auth: {
                         usertype: {
-                            slug: process.env.ADMIN_USER_TYPE_SLUG
+                            slug: SLUG
                         }
                     }
                 }
