@@ -223,6 +223,12 @@ const getAuthObject = async (auth) => {
 }
 
 const getUserTypes = async (req, res) => {
+    const SLUG = process.env.ADMIN_USER_TYPE_SLUG;
+    if (!SLUG) {
+        console.log("ADMIN_USER_TYPE_SLUG is not set");
+        return res.status(500).json({ "message": "Internal server error" });
+    }
+
     const userTypes = await prisma.UserType.findMany({
         select: {
             name: true,
@@ -230,7 +236,7 @@ const getUserTypes = async (req, res) => {
         },
         where: {
             NOT: {
-                slug: process.env.ADMIN_USER_TYPE_SLUG
+                slug: SLUG
             }
         }
     });
