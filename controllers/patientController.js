@@ -74,53 +74,44 @@ const addNewPatient = async(req, res) =>{
     }
 }
 
-// const getAllPatients = async (req, res) => {
-//     const { skip, take } = req.query;
-//     const validation = validate.skip_take_validation({ skip, take });
+const getAllPatients = async (req, res) => {
+    const { skip, take } = req.query;
+    const validation = validate.skip_take_validation({ skip, take });
 
-//     if (validation?.error) {
-//         return res.status(400).json({
-//             "message": validation.error.details
-//         });
-//     }
+    if (validation?.error) {
+        return res.status(400).json({
+            "message": validation.error.details
+        });
+    }
 
-//     try {
-//         const userTypesIDs = await prisma.UserType.findMany({
-//             where: {
-//                 name: {
-//                     in: ['examiner', 'doctor']
-//                 }
-//             },
-//             select: {
-//                 id: true
-//             },
-//             skip: parseInt(skip),
-//             take: parseInt(take)
-//         });
-//         // console.log(userTypesIDs)
-//         // console.log()
-//         const employees = await prisma.User.findMany({
-//             where: {
-//                 auth: {
-//                     user_type_id: {
-//                         in: userTypesIDs.map(userType => userType.id)
-//                     }
-//                 }
-//             },
-//         });
-//         // console.log(employees)
-//         return res.status(200).json({
-//             status: 'success',
-//             data: employees
-//         })
-//     } catch (error) {
-//         console.log(error)
-//         return res.status(500).json({
-//             status: 'error',
-//             message: error.message
-//         })
-//     }
-// }
+    try {
+        const patients = await prisma.Patient.findMany({
+            select: {
+                firstname: true,
+                lastname: true,
+                nic: true,
+                contact_no: true,
+                email: true,
+                birthday: true,
+                gender_type: true
+            },
+            skip: parseInt(skip),
+            take: parseInt(take)
+        });
+
+        console.log(patients);
+        return res.status(200).json({
+            status: 'success',
+            data: patients
+        })
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({
+            status: 'error',
+            message: error.message
+        })
+    }
+}
 
 const getPatient = async (req, res) => {
     try {
@@ -158,5 +149,6 @@ const getPatient = async (req, res) => {
 module.exports = {
     getGenderType,
     addNewPatient,
-    getPatient
+    getPatient,
+    getAllPatients
 }
