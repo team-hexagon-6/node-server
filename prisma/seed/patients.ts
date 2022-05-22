@@ -20,4 +20,24 @@ export const patients =[
         birthday: new Date('2020-01-01'),
         gender_type_id: 2
     },
+    {
+        id:'P12345678',
+        firstname: 'patient_3',
+        lastname: 'examiner',
+        nic: '91234567v',
+        contact_no: '0771234567',
+        email:  'p2@gmail.com',
+        birthday: new Date('2020-01-01'),
+        gender_type_id: 2
+    },
+    {
+        id:'P233344335',
+        firstname: 'patient_3',
+        lastname: 'examiner',
+        nic: '91234567v',
+        contact_no: '0771234567',
+        email:  'p2@gmail.com',
+        birthday: new Date('2020-01-01'),
+        gender_type_id: 2
+    },
 ]
