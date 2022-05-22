@@ -7,7 +7,7 @@
   "description": "se-project backend developed by the team-hexagon-6",
   "main": "server.js",
   "scripts": {
-    "test": "jest --watchAll --verbose",
+    "test": "jest",
     "start": "node server",
     "dev": "nodemon server"
   },
