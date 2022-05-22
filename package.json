@@ -7,7 +7,7 @@
   "description": "se-project backend developed by the team-hexagon-6",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "start": "node server",
     "dev": "nodemon server"
   },
@@ -22,12 +22,14 @@
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
     "form-data": "^4.0.0",
+    "jest": "^28.1.0",
     "joi": "^17.6.0",
     "jsonwebtoken": "^8.5.1",
     "multer": "^1.4.4",
     "nodemon": "^2.0.15"
   },
   "devDependencies": {
+    "@types/jest": "^27.5.1",
     "prisma": "^3.12.0",
     "ts-node": "^10.7.0"
   }
