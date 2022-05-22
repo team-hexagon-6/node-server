@@ -7,7 +7,7 @@
 > 2022 Team Hexagon 6. All rights reserved.
 
 ## Authors
->Ayesh Vininda : # 🔥🔥🔥 NOCTUS CODER # 🔥🔥🔥 *[GitHub](https://github.com/AyeshGK)*
+>Ayesh Vininda : 🔥🔥🔥NOCTUS CODER🔥🔥🔥 *[GitHub](https://github.com/AyeshGK)*
 ####
 >Nipun Pramuditha : AwesomeNipun *[GitHub](https://github.com/AwesomeNipun)*
 ## Installation 
