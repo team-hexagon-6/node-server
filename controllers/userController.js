@@ -278,7 +278,7 @@ const updateUserByUser = async (req, res) => {
     const foundUser = await prisma.User.findUnique({
         where: {
             user_id: user_id
-        }
+        },
     });
 
     if (!foundAuth || !foundUser) {
@@ -439,6 +439,20 @@ const getUser = async (req, res) => {
     const foundUser = await prisma.User.findUnique({
         where: {
             user_id: user_id
+        },
+        include: {
+            auth: {
+                select: {
+                    complete_profile: true,
+                    logged_at: true,
+                    active: true,
+                    usertype: {
+                        select: {
+                            name: true
+                        }
+                    }
+                }
+            }
         }
     });
 
