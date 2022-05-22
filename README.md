@@ -7,12 +7,12 @@
 > 2022 Team Hexagon 6. All rights reserved.
 
 ## Authors
->Ayesh Vininda : NOCTUS CODER *[GitHub](https://github.com/AyeshGK)*
+>Ayesh Vininda : # 🔥🔥🔥 NOCTUS CODER # 🔥🔥🔥 *[GitHub](https://github.com/AyeshGK)*
 ####
 >Nipun Pramuditha : AwesomeNipun *[GitHub](https://github.com/AwesomeNipun)*
 ## Installation 
 
->**Save Repository:** `https://github.com/team-hexagon-6/rest-api-parkinson-disease-detection.git`
+>**Save Repository:** *[repo]([https://pd-node-backend.herokuapp.com/](https://github.com/team-hexagon-6/node-server.git))*
 >**Install Packages:** `npm install`
 
 
