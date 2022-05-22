@@ -1,0 +1,6 @@
+prisma migrate dev --name init
+
+// for frontends 
+npx prisma db push
+npx prisma db seed
+
