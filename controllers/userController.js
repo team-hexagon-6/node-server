@@ -3,8 +3,137 @@ const bcrypt = require('bcrypt');
 const prisma = require('../config/client');
 const validate = require('../utils/validation');
 
-
 // functions 
+const getDoctors = async (req, res) => {
+    const DOCTOR_SLUG = process.env.DOCTOR_USER_TYPE_SLUG;
+    if (!DOCTOR_SLUG) {
+        console.log("DOCTOR_USER_TYPE_SLUG is not set");
+        return res.status(500).json({ "message": "Internal server error" });
+    }
+
+    const { skip, take } = req.query;
+    const validation = validate.skip_take_validation({ skip, take });
+
+    if (validation?.error) {
+        return res.status(400).json({
+            "message": validation.error.details
+        });
+    }
+
+    try {
+        const doctors = await prisma.User.findMany({
+            where: {
+                auth: {
+                    usertype: {
+                        slug: DOCTOR_SLUG
+                    }
+                }
+            },
+            select: {
+                firstname: true,
+                lastname: true,
+                nic: true,
+                contact_no: true,
+                email: true,
+                birthday: true,
+                created_at: true,
+                auth: {
+                    select: {
+                        id: true,
+                        logged_at: true,
+                        complete_profile: true,
+                        usertype: {
+                            select: {
+                                name: true,
+                            }
+                        }
+                    }
+                }
+            },
+            skip: parseInt(skip),
+            take: parseInt(take)
+        });
+
+        return res.status(200).json({
+            status: 'success',
+            data: doctors
+        })
+    }
+    catch (error) {
+        console.log(error)
+        return res.status(500).json({
+            status: 'error',
+            message: error.message
+        })
+    }
+}
+
+const getExaminers = async (req, res) => {
+    const EXAMINER_SLUG = process.env.EXAMINER_USER_TYPE_SLUG;
+    if (!EXAMINER_SLUG) {
+        console.log("EXAMINER_USER_TYPE_SLUG is not set");
+        return res.status(500).json({ "message": "Internal server error" });
+    }
+
+    const { skip, take } = req.query;
+
+    const validation = validate.skip_take_validation({ skip, take });
+
+    if (validation?.error) {
+        return res.status(400).json({
+            "message": validation.error.details
+        });
+    }
+
+    try {
+        const examiners = await prisma.User.findMany({
+            where: {
+                auth: {
+                    usertype: {
+                        slug: EXAMINER_SLUG
+                    }
+                }
+            },
+            select: {
+                firstname: true,
+                lastname: true,
+                nic: true,
+                contact_no: true,
+                email: true,
+                birthday: true,
+                created_at: true,
+                auth: {
+                    select: {
+                        id: true,
+                        logged_at: true,
+                        complete_profile: true,
+                        usertype: {
+                            select: {
+                                name: true,
+                            }
+                        }
+                    }
+                }
+            },
+            skip: parseInt(skip),
+            take: parseInt(take)
+        });
+
+        return res.status(200).json({
+            status: 'success',
+            data: examiners
+        })
+    }
+    catch (error) {
+        console.log(error)
+        return res.status(500).json({
+            status: 'error',
+            message: error.message
+        })
+    }
+}
+
+
 const getAllEmpoyees = async (req, res) => {
     const SLUG = process.env.ADMIN_USER_TYPE_SLUG;
     if (!SLUG) {
@@ -331,6 +460,7 @@ module.exports = {
     updateUserByUser,
     updatePasswordByUser,
     updatePasswordByAdmin,
-    getUser
-
+    getUser,
+    getDoctors,
+    getExaminers,
 }
