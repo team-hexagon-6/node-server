@@ -54,9 +54,20 @@ const getDoctors = async (req, res) => {
             take: parseInt(take)
         });
 
+        const totalItems = await prisma.User.count({
+            where: {
+                auth: {
+                    usertype: {
+                        slug: DOCTOR_SLUG
+                    }
+                }
+            }
+        })
+
         return res.status(200).json({
             status: 'success',
-            data: doctors
+            data: doctors,
+            total_items: totalItems
         })
     }
     catch (error) {
@@ -119,9 +130,20 @@ const getExaminers = async (req, res) => {
             take: parseInt(take)
         });
 
+        const totalItems = await prisma.User.count({
+            where: {
+                auth: {
+                    usertype: {
+                        slug: EXAMINER_SLUG
+                    }
+                }
+            }
+        })
+
         return res.status(200).json({
             status: 'success',
-            data: examiners
+            data: examiners,
+            total_items: totalItems
         })
     }
     catch (error) {

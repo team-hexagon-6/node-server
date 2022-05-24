@@ -186,6 +186,13 @@ const getTest = async (req, res) => {
         });
     }
 
+    const totalItems = await prisma.Test.count({
+        where: {
+            id: test_id
+        }
+    });
+
+
     const test = await prisma.Test.findUnique({
         where: {
             id: test_id
@@ -229,7 +236,8 @@ const getTest = async (req, res) => {
 
     return res.status(200).json({
         "message": 'success',
-        "test": test
+        "test": test,
+        total_items: totalItems
     });
 }
 
@@ -264,6 +272,12 @@ const getAllTestsForPatient = async (req, res) => {
         })
     }
 
+    // FIXME: try more efficient way to get count
+    const totalItems = await prisma.Test.count({
+        where: {
+            patient_id: patient_id
+        }
+    });
 
     const tests = await prisma.Test.findMany({
         where: {
@@ -278,7 +292,8 @@ const getAllTestsForPatient = async (req, res) => {
 
     return res.status(200).json({
         "message": 'success',
-        "tests": tests
+        "tests": tests,
+        total_items: totalItems
     });
 }
 

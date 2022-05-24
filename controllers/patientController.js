@@ -104,10 +104,13 @@ const getAllPatients = async (req, res) => {
             take: parseInt(take)
         });
 
+        const totalItems = await prisma.Patient.count();
+
         console.log(patients);
         return res.status(200).json({
             status: 'success',
-            data: patients
+            data: patients,
+            total_items: totalItems
         })
     } catch (error) {
         console.log(error)
