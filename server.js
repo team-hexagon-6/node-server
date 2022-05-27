@@ -32,12 +32,12 @@ app.use('/', require('./routes/site'));
 app.use('/auth', require('./routes/auth'));
 
 // Routes with verifyJWT
-app.use(verifyJWT)
-app.use('/api/user', require('./routes/api/user'));
-app.use('/api/patient', require('./routes/api/patient'));
+// app.use(verifyJWT)
+app.use('/api/user', verifyJWT, require('./routes/api/user'));
+app.use('/api/patient', verifyJWT, require('./routes/api/patient'));
 // add multipart file access
 app.use(multer().array())
-app.use('/api/test', require('./routes/api/_test'));
+app.use('/api/test', verifyJWT, require('./routes/api/_test'));
 
 
 
