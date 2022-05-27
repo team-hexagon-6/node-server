@@ -20,9 +20,9 @@ const PORT = process.env.PORT || 3500;
 // parsing the incoming data
 app.use(credentials);
 app.use(cors(coresOptions));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 // cookie parser middleware
 app.use(cookieParser());
 

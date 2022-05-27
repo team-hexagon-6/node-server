@@ -5,8 +5,8 @@ const credentials = (req, res, next) => {
     console.log('credentials....');
     const origin = req.headers.origin;
 
-    if (allowedOrigins.indexOf(origin)) {
-        res.setHeader('Access-Control-Allow-Origin', true);
+    if (allowedOrigins.includes(origin)) {
+        res.setHeader('Access-Control-Allow-Credentials', true);
     }
 
     console.log(`credential ... done for ${origin}`);
