@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const prisma = require('../config/client');
 const validate = require('../utils/validation');
 const token = require('../utils/token');
+const jwt = require('jsonwebtoken');
 
 const allowedRoles = require('../config/allowedRoles');
 
@@ -120,7 +121,7 @@ const handleLogin = async (req, res) => {
 
     console.log(result)
 
-    res.cookie('jwt', refresh_token, { httpOnly: true, sameSite: 'None', maxAge: 24 * 60 * 60 * 1000 });
+    res.cookie('jwt', refresh_token, { httpOnly: true, secure: true, sameSite: 'None', maxAge: 24 * 60 * 60 * 1000 });
     return res.status(200).json({
         "message": "Login successful",
         "access_token": access_token,
@@ -129,9 +130,16 @@ const handleLogin = async (req, res) => {
 }
 
 const handleNewAccessToken = async (req, res) => {
+    console.log("requesting new access token");
+
     const cookies = req.cookies;
+    // const cookies = req.cookies;
+    console.log("cookiee value :", cookies);
+
 
     if (!cookies?.jwt) {
+        console.log("invalid refresh token :", cookies?.jwt);
+
         return res.status(401).json({ "message": "Invalid token" });
     }
 
@@ -156,14 +164,16 @@ const handleNewAccessToken = async (req, res) => {
             console.log('decoded ', decoded);
             console.log('auth ', auth);
             if (err || auth.user_id !== decoded.user_id) {
+                console.log("requesting new access token failed invalid token")
                 return res.status(403).json({ "message": "Invalid token" });
             }
 
+            // FIXME: check if need to update refresh token also
             const access_token = token.getAccessToken(authObject);
+            console.log("new access token getting sucessfully")
             return res.status(200).json({
                 "message": "Refresh token successful",
                 "access_token": access_token,
-
             });
         })
 }
@@ -171,7 +181,7 @@ const handleNewAccessToken = async (req, res) => {
 const handleLogout = async (req, res) => {
     // const { user_id } = req.body;
     const cookies = req.cookies;
-    console.log(cookies);
+    console.log("cookiee value :", cookies);
 
     if (!cookies?.jwt) {
         return res.status(204).json({ "message": "No token found" });
