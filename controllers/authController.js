@@ -171,6 +171,7 @@ const handleNewAccessToken = async (req, res) => {
 const handleLogout = async (req, res) => {
     // const { user_id } = req.body;
     const cookies = req.cookies;
+    console.log(cookies);
 
     if (!cookies?.jwt) {
         return res.status(204).json({ "message": "No token found" });
