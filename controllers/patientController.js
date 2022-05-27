@@ -92,6 +92,7 @@ const getAllPatients = async (req, res) => {
     try {
         const patients = await prisma.Patient.findMany({
             select: {
+                id: true,
                 firstname: true,
                 lastname: true,
                 nic: true,
@@ -153,10 +154,77 @@ const getPatient = async (req, res) => {
     }
 }
 
+const updatePatient = async(req, res) => {
+    const{patient_id, firstname, lastname, nic, contact_no, email, birthday, gender_type} = req.body;
+    // const patient_id = req.patient_id;
+
+    const validation = validate.update_patient_validation({firstname, lastname, nic, contact_no, email, birthday});
+
+    if (validation.error) {
+        return res.status(400).json({
+            "message": validation.error.details
+        });
+    }
+    const foundPatient = await prisma.Patient.findUnique({
+        where: {
+            id: patient_id
+        },
+    });
+
+    if (!foundPatient) {
+        return res.status(404).json({
+            "message": `Patient :${patient_id} does not exist...`
+        });
+    }
+
+
+    const genderType = await prisma.GenderType.findUnique({
+        where: {
+            slug: gender_type
+        }
+    });
+
+    if (!genderType) {
+        console.log("gender type not exits")
+        return res.status(400).json({ "message": `Gender type :${gender_type} does not exist...` });
+    }
+
+    try{
+        const updatePatient = await prisma.Patient.update({
+            where: {
+                id: patient_id
+            },
+            data: {
+                firstname: firstname,
+                lastname: lastname,
+                nic: nic,
+                contact_no: contact_no,
+                email: email,
+                birthday: new Date(birthday),
+                gender_type_id: genderType.id
+            }
+        });
+
+        console.log(updatePatient)
+
+        return res.status(200).json({
+            status: 'success',
+            data: updatePatient
+        });
+    }catch(error){
+        console.log(error)
+        return res.status(500).json({
+            status: 'error',
+            message: error.message
+        });
+    }
+}
+
 
 module.exports = {
     getGenderType,
     addNewPatient,
     getPatient,
-    getAllPatients
+    getAllPatients,
+    updatePatient
 }
