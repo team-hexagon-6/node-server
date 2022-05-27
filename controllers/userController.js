@@ -481,7 +481,7 @@ const getUser = async (req, res) => {
 }
 
 const activateDeactivateUser = async (req, res) => {
-    const user_id = req.user_id;
+    const user_id = req.body.user_id;
 
     const validation = validate.user_id_validation({ user_id });
 
