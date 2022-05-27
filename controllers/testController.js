@@ -143,8 +143,6 @@ const doTest = async (req, res) => {
             "message": 'Internal server error...'
         });
     }
-
-
 }
 
 const handlenNewTestRecord = async (data, test_id, examiner_id, patient_id, testType) => {
@@ -359,6 +357,7 @@ const getAllTestRecords = async (req, res) => {
     });
 }
 
+// FIXME:try do it in efficient way 
 const handleViewTestRecords = async (test_records) => {
     const testTypes = await prisma.TestType.findMany();
     const testResultTypes = await prisma.TestResult.findMany();
@@ -444,9 +443,7 @@ const confirmTest = async (req, res) => {
         "message": 'success',
         "test": confirmedTest
     });
-
 }
-
 
 const mappingTypes = (typesArray) => {
     const mapObject = {};
