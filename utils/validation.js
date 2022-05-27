@@ -129,6 +129,14 @@ const confirm_test_validation = (data) => {
     return schema.validate(data, { abortEarly: false });
 }
 
+const user_id_validation = (data) => {
+    const schema = Joi.object({
+        user_id: Joi.string().min(5).max(25).required(),
+    })
+
+    return schema.validate(data, { abortEarly: false });
+}
+
 
 module.exports = {
     register_vaidation,
@@ -143,5 +151,6 @@ module.exports = {
     get_test_record_validation,
     new_patient_validation,
     patient_id_validation,
-    confirm_test_validation
+    confirm_test_validation,
+    user_id_validation
 }
