@@ -119,6 +119,21 @@ const patient_id_validation = (data) => {
     return schema.validate(data, { abortEarly: false });
 }
 
+const update_patient_validation = (data) => {
+    const schema = Joi.object({
+        firstname: Joi.string().min(5).max(25).required(),
+        lastname: Joi.string().min(5).max(25).required(),
+        nic: Joi.string().required(),
+        contact_no: Joi.string().required(),
+        email: Joi.string().email().required(),
+        birthday: Joi.date().required()
+        // TODO: add gender_type to update
+        // gender_type: Joi.string()
+    })
+
+    return schema.validate(data, { abortEarly: false });
+}
+
 
 const confirm_test_validation = (data) => {
     const schema = Joi.object({
@@ -143,5 +158,6 @@ module.exports = {
     get_test_record_validation,
     new_patient_validation,
     patient_id_validation,
-    confirm_test_validation
+    confirm_test_validation,
+    update_patient_validation
 }
