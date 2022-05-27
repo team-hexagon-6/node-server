@@ -9,6 +9,7 @@ const verifyJWT = (req, res, next) => {
 
 
     if (!authHeader?.startsWith('Bearer ')) {
+        console.log('Invalid token VERIFYJWT : ', authHeader);
         return res.status(401).json({
             "message": "Invalid token"
         });

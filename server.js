@@ -28,8 +28,8 @@ app.use(cookieParser());
 
 
 // routes
-app.use('/auth', require('./routes/auth'));
 app.use('/', require('./routes/site'));
+app.use('/auth', require('./routes/auth'));
 
 // Routes with verifyJWT
 app.use(verifyJWT)

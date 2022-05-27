@@ -167,7 +167,7 @@ module.exports = {
     new_patient_validation,
     patient_id_validation,
     confirm_test_validation,
-    user_id_validation
+    user_id_validation,
     update_patient_validation
 
 }
