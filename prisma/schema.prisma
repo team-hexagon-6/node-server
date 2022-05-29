@@ -67,7 +67,7 @@ model TestType {
 }
 
 model User {
-  user_id    String       @id @db.VarChar(25)
+  user_id    String       @id @db.VarChar(11)
   firstname  String?      @db.VarChar(255)
   lastname   String?      @db.VarChar(255)
   nic        String?      @db.VarChar(20)
