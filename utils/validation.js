@@ -8,9 +8,10 @@ const register_vaidation = (data) => {
     const schema = Joi.object({
         user_id: Joi.string().length(10).required().pattern(new RegExp('/^[0-9]{9}.[A-Z]{1}$/'))
             .messages({
-                "string.empty": "Field should not be empty!",
-                "string.length": `Field should be exactly {#limit} characters!`,
-                "string.required": "Field is required!"
+                "string.empty": "ID should not be empty!",
+                "string.length": `ID should be exactly {#limit} characters!`,
+                "string.required": "ID is required!",
+                "string.pattern.base": "ID form invalid... Ex:- 123456789A"
             }),
 
         user_type: Joi.string().max(10).required()
@@ -28,9 +29,10 @@ const login_validation = (data) => {
     const schema = Joi.object({
         user_id: Joi.string().length(10).required().pattern(new RegExp('/^[0-9]{9}.[A-Z]{1}$/'))
             .messages({
-                "string.empty": "Field should not be empty!",
-                "string.length": `Field should be exactly {#limit} characters!`,
-                "string.required": "Field is required!"
+                "string.empty": "ID should not be empty!",
+                "string.length": `ID should be exactly {#limit} characters!`,
+                "string.required": "ID is required!",
+                "string.pattern.base": "ID form invalid... Ex:- 123456789A"
             }),
         password: password_joi_object(),
     })
@@ -85,9 +87,10 @@ const update_password_validation = (data) => {
         old_password: password_joi_object(),
         user_id: Joi.string().length(10).required().pattern(new RegExp('/^[0-9]{9}.[A-Z]{1}$/'))
             .messages({
-                "string.empty": "Field should not be empty!",
-                "string.length": `Field should be exactly {#limit} characters!`,
-                "string.required": "Field is required!"
+                "string.empty": "ID should not be empty!",
+                "string.length": `ID should be exactly {#limit} characters!`,
+                "string.required": "ID is required!",
+                "string.pattern.base": "ID form invalid... Ex:- 123456789A"
             }),
     })
 
@@ -99,9 +102,10 @@ const password_validation = (data) => {
         password: password_joi_object(),
         user_id: Joi.string().length(10).required().pattern(new RegExp('/^[0-9]{9}.[A-Z]{1}$/'))
             .messages({
-                "string.empty": "Field should not be empty!",
-                "string.length": `Field should be exactly {#limit} characters!`,
-                "string.required": "Field is required!"
+                "string.empty": "ID should not be empty!",
+                "string.length": `ID should be exactly {#limit} characters!`,
+                "string.required": "ID is required!",
+                "string.pattern.base": "ID form invalid... Ex:- 123456789A"
             }),
     })
 
@@ -112,9 +116,10 @@ const get_user_validation = (data) => {
     const schema = Joi.object({
         user_id: Joi.string().length(10).required().pattern(new RegExp('/^[0-9]{9}.[A-Z]{1}$/'))
             .messages({
-                "string.empty": "Field should not be empty!",
-                "string.length": `Field should be exactly {#limit} characters!`,
-                "string.required": "Field is required!"
+                "string.empty": "ID should not be empty!",
+                "string.length": `ID should be exactly {#limit} characters!`,
+                "string.required": "ID is required!",
+                "string.pattern.base": "ID form invalid... Ex:- 123456789A"
             }),
     })
 
@@ -319,9 +324,10 @@ const user_id_validation = (data) => {
     const schema = Joi.object({
         user_id: Joi.string().length(10).required().pattern(new RegExp('/^[0-9]{9}.[A-Z]{1}$/'))
             .messages({
-                "string.empty": "Field should not be empty!",
-                "string.length": `Field should be exactly {#limit} characters!`,
-                "string.required": "Field is required!"
+                "string.empty": "ID should not be empty!",
+                "string.length": `ID should be exactly {#limit} characters!`,
+                "string.required": "ID is required!",
+                "string.pattern.base": "ID form invalid... Ex:- 123456789A"
             }),
     })
 
