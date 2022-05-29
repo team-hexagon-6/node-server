@@ -4,21 +4,19 @@
 const { text } = require('express');
 const Joi = require('joi').extend(require('@joi/date'));
 
-// function string_validation(){
-//     empty = 'string.empty': "Field should not be empty!";
-//     return 
-// }
-
 const register_vaidation = (data) => {
     const schema = Joi.object({
-        user_id: Joi.string().min(5).max(25).required()
-            .messages({
+        user_id: Joi.string().length(10).required().pattern(new RegExp('/^[0-9]{9}.[A-Z]{1}$/'))
+                .messages({
                 "string.empty": "Field should not be empty!",
-                "string.min": `Field should have at least {#limit} characters!`,
-                "string.max": `Field should have at most {#limit} characters!`,
-                "string.required": "Field is required!"
-            }),
-
+                "string.length": `Field should be exactly {#limit} characters!`,
+                "string.required":"Field is required!"
+                }),
+        password: Joi.string().required().pattern(new RegExp('^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$'))
+                .messages({
+                    "string.empty": "Field should not be empty!",
+                    "string.required":"Field is required!"
+                }),
         user_type: Joi.string().max(10).required()
             .messages({
                 "string.empty": "Field should not be empty!",
@@ -32,14 +30,17 @@ const register_vaidation = (data) => {
 
 const login_validation = (data) => {
     const schema = Joi.object({
-        user_id: Joi.string().min(5).max(25).required()
-            .messages({
+        user_id: Joi.string().length(10).required().pattern(new RegExp('/^[0-9]{9}.[A-Z]{1}$/'))
+                .messages({
                 "string.empty": "Field should not be empty!",
-                "string.min": `Field should have at least {#limit} characters!`,
-                "string.max": `Field should have at most {#limit} characters!`,
-                "string.required": "Field is required!"
-            }),
-        password: password_joi_object()
+                "string.length": `Field should be exactly {#limit} characters!`,
+                "string.required":"Field is required!"
+                }),
+        password: Joi.string().required().pattern(new RegExp('^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$'))
+                .messages({
+                    "string.empty": "Field should not be empty!",
+                    "string.required":"Field is required!"
+                }),
     })
 
     return schema.validate(data, { abortEarly: false });
@@ -47,20 +48,16 @@ const login_validation = (data) => {
 
 const update_user_validation = (data) => {
     const schema = Joi.object({
-        firstname: Joi.string().min(5).max(25).required()
-            .messages({
-                "string.empty": "Field should not be empty!",
-                "string.min": `Field should have at least {#limit} characters!`,
-                "string.max": `Field should have at most {#limit} characters!`,
-                "string.required": "Field is required!"
-            }),
-        lastname: Joi.string().min(5).max(25).required()
-            .messages({
-                "string.empty": "Field should not be empty!",
-                "string.min": `Field should have at least {#limit} characters!`,
-                "string.max": `Field should have at most {#limit} characters!`,
-                "string.required": "Field is required!"
-            }),
+        firstname: Joi.string().required()
+                .messages({
+                    "string.empty": "Field should not be empty!",
+                    "string.required":"Field is required!"
+                }),
+        lastname: Joi.string().required()
+                .messages({
+                    "string.empty": "Field should not be empty!",
+                    "string.required":"Field is required!"
+                }),
         nic: Joi.string().required()
             .messages({
                 "string.empty": "Field should not be empty!",
@@ -94,13 +91,12 @@ const update_password_validation = (data) => {
     const schema = Joi.object({
         new_password: password_joi_object(),
         old_password: password_joi_object(),
-        user_id: Joi.string().min(5).max(25).required()
-            .messages({
+        user_id: Joi.string().length(10).required().pattern(new RegExp('/^[0-9]{9}.[A-Z]{1}$/'))
+                .messages({
                 "string.empty": "Field should not be empty!",
-                "string.min": `Field should have at least {#limit} characters!`,
-                "string.max": `Field should have at most {#limit} characters!`,
-                "string.required": "Field is required!"
-            }),
+                "string.length": `Field should be exactly {#limit} characters!`,
+                "string.required":"Field is required!"
+                }),
     })
 
     return schema.validate(data, { abortEarly: false });
@@ -109,13 +105,12 @@ const update_password_validation = (data) => {
 const password_validation = (data) => {
     const schema = Joi.object({
         password: password_joi_object(),
-        user_id: Joi.string().min(5).max(25).required()
-            .messages({
+        user_id: Joi.string().length(10).required().pattern(new RegExp('/^[0-9]{9}.[A-Z]{1}$/'))
+                .messages({
                 "string.empty": "Field should not be empty!",
-                "string.min": `Field should have at least {#limit} characters!`,
-                "string.max": `Field should have at most {#limit} characters!`,
-                "string.required": "Field is required!"
-            }),
+                "string.length": `Field should be exactly {#limit} characters!`,
+                "string.required":"Field is required!"
+                }),
     })
 
     return schema.validate(data, { abortEarly: false });
@@ -123,13 +118,12 @@ const password_validation = (data) => {
 
 const get_user_validation = (data) => {
     const schema = Joi.object({
-        user_id: Joi.string().min(5).max(25).required()
-            .messages({
+        user_id: Joi.string().length(10).required().pattern(new RegExp('/^[0-9]{9}.[A-Z]{1}$/'))
+                .messages({
                 "string.empty": "Field should not be empty!",
-                "string.min": `Field should have at least {#limit} characters!`,
-                "string.max": `Field should have at most {#limit} characters!`,
-                "string.required": "Field is required!"
-            })
+                "string.length": `Field should be exactly {#limit} characters!`,
+                "string.required":"Field is required!"
+                }),
     })
 
     return schema.validate(data, { abortEarly: false });
@@ -213,20 +207,16 @@ const get_test_record_validation = (data) => {
 
 const new_patient_validation = (data) => {
     const schema = Joi.object({
-        firstname: Joi.string().min(5).max(25).required()
-            .messages({
-                "string.empty": "Field should not be empty!",
-                "string.min": `Field should have at least {#limit} characters!`,
-                "string.max": `Field should have at most {#limit} characters!`,
-                "string.required": "Field is required!"
-            }),
-        lastname: Joi.string().min(5).max(25).required()
-            .messages({
-                "string.empty": "Field should not be empty!",
-                "string.min": `Field should have at least {#limit} characters!`,
-                "string.max": `Field should have at most {#limit} characters!`,
-                "string.required": "Field is required!"
-            }),
+        firstname: Joi.string().required()
+                .messages({
+                    "string.empty": "Field should not be empty!",
+                    "string.required":"Field is required!"
+                }),
+        lastname: Joi.string().required()
+                .messages({
+                    "string.empty": "Field should not be empty!",
+                    "string.required":"Field is required!"
+                }),
         nic: Joi.string().required()
             .messages({
                 "string.empty": "Field should not be empty!",
@@ -272,20 +262,16 @@ const patient_id_validation = (data) => {
 
 const update_patient_validation = (data) => {
     const schema = Joi.object({
-        firstname: Joi.string().min(5).max(25).required()
-            .messages({
-                "string.empty": "Field should not be empty!",
-                "string.min": `Field should have at least {#limit} characters!`,
-                "string.max": `Field should have at most {#limit} characters!`,
-                "string.required": "Field is required!"
-            }),
-        lastname: Joi.string().min(5).max(25).required()
-            .messages({
-                "string.empty": "Field should not be empty!",
-                "string.min": `Field should have at least {#limit} characters!`,
-                "string.max": `Field should have at most {#limit} characters!`,
-                "string.required": "Field is required!"
-            }),
+        firstname: Joi.string().required()
+                .messages({
+                    "string.empty": "Field should not be empty!",
+                    "string.required":"Field is required!"
+                }),
+        lastname: Joi.string().required()
+                .messages({
+                    "string.empty": "Field should not be empty!",
+                    "string.required":"Field is required!"
+                }),
         nic: Joi.string().required()
             .messages({
                 "string.empty": "Field should not be empty!",
@@ -318,14 +304,18 @@ const update_patient_validation = (data) => {
 
 const confirm_test_validation = (data) => {
     const schema = Joi.object({
-        test_id: Joi.string().required()
+        test_id: Joi.string().min(5).max(192).required()
             .messages({
                 "string.empty": "Field should not be empty!",
+                "string.min": `Field should have at least {#limit} characters!`,
+                "string.max": `Field should have at most {#limit} characters!`,
                 "string.required": "Field is required!"
             }),
-        patient_id: Joi.string().required()
+        patient_id: Joi.string().min(5).max(25).required()
             .messages({
                 "string.empty": "Field should not be empty!",
+                "string.min": `Field should have at least {#limit} characters!`,
+                "string.max": `Field should have at most {#limit} characters!`,
                 "string.required": "Field is required!"
             }),
     })
@@ -335,13 +325,12 @@ const confirm_test_validation = (data) => {
 
 const user_id_validation = (data) => {
     const schema = Joi.object({
-        user_id: Joi.string().min(5).max(25).required()
-            .messages({
+        user_id: Joi.string().length(10).required().pattern(new RegExp('/^[0-9]{9}.[A-Z]{1}$/'))
+                .messages({
                 "string.empty": "Field should not be empty!",
-                "string.min": `Field should have at least {#limit} characters!`,
-                "string.max": `Field should have at most {#limit} characters!`,
-                "string.required": "Field is required!"
-            }),
+                "string.length": `Field should be exactly {#limit} characters!`,
+                "string.required":"Field is required!"
+                }),
     })
 
     return schema.validate(data, { abortEarly: false });
