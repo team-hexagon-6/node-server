@@ -276,6 +276,7 @@ const updateUserByUser = async (req, res) => {
     const validation = validate.update_user_validation({ firstname, lastname, nic, contact_no, email, birthday });
 
     if (validation.error) {
+        console.log(validation.error.details);
         return res.status(400).json({
             "message": validation.error.details
         });
@@ -294,6 +295,7 @@ const updateUserByUser = async (req, res) => {
     });
 
     if (!foundAuth || !foundUser) {
+        console.log(validation.error.details);
         return res.status(404).json({
             "message": `User :${user_id} does not exist...`
         });
