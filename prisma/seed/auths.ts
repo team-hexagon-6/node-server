@@ -21,7 +21,7 @@ export const auths =[
     // 
     {
         id:"23334sdf43D",
-        user_type_id:2,
+        user_type_id:3,
         password:"$2b$10$vn9AzLGJP9imTSOErEW.lOaSbvxReIJKwNJK6E4JIPlLUawJlDjmO",
         complete_profile: true,
     },
@@ -51,7 +51,7 @@ export const auths =[
     },
     {
         id:"23334fjfh343D",
-        user_type_id:2,
+        user_type_id:3,
         password:"$2b$10$vn9AzLGJP9imTSOErEW.lOaSbvxReIJKwNJK6E4JIPlLUawJlDjmO",
         complete_profile: true,
     },
