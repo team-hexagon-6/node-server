@@ -6,12 +6,12 @@ const Joi = require('joi').extend(require('@joi/date'));
 
 const register_vaidation = (data) => {
     const schema = Joi.object({
-        user_id: Joi.string().length(10).required().pattern(new RegExp('/^[0-9]{9}.[A-Z]{1}$/'))
+        user_id: Joi.string().length(10).required().pattern(new RegExp('^[0-9]{9}[A-Z]$'))
             .messages({
                 "string.empty": "ID should not be empty!",
                 "string.length": `ID should be exactly {#limit} characters!`,
                 "string.required": "ID is required!",
-                "string.pattern.base": "ID form invalid... Ex:- 123456789A"
+                "string.pattern.base": "ID form invalid... Ex:- 123456789D"
             }),
 
         user_type: Joi.string().max(10).required()
@@ -27,12 +27,12 @@ const register_vaidation = (data) => {
 
 const login_validation = (data) => {
     const schema = Joi.object({
-        user_id: Joi.string().length(10).required().pattern(new RegExp('/^[0-9]{9}.[A-Z]{1}$/'))
+        user_id: Joi.string().length(10).required().pattern(new RegExp('^[0-9]{9}[A-Z]$'))
             .messages({
                 "string.empty": "ID should not be empty!",
                 "string.length": `ID should be exactly {#limit} characters!`,
                 "string.required": "ID is required!",
-                "string.pattern.base": "ID form invalid... Ex:- 123456789A"
+                "string.pattern.base": "ID form invalid... Ex:- 123456789D"
             }),
         password: password_joi_object(),
     })
@@ -85,12 +85,12 @@ const update_password_validation = (data) => {
     const schema = Joi.object({
         new_password: password_joi_object(),
         old_password: password_joi_object(),
-        user_id: Joi.string().length(10).required().pattern(new RegExp('/^[0-9]{9}.[A-Z]{1}$/'))
+        user_id: Joi.string().length(10).required().pattern(new RegExp('^[0-9]{9}[A-Z]$'))
             .messages({
                 "string.empty": "ID should not be empty!",
                 "string.length": `ID should be exactly {#limit} characters!`,
                 "string.required": "ID is required!",
-                "string.pattern.base": "ID form invalid... Ex:- 123456789A"
+                "string.pattern.base": "ID form invalid... Ex:- 123456789D"
             }),
     })
 
@@ -100,12 +100,12 @@ const update_password_validation = (data) => {
 const password_validation = (data) => {
     const schema = Joi.object({
         password: password_joi_object(),
-        user_id: Joi.string().length(10).required().pattern(new RegExp('/^[0-9]{9}.[A-Z]{1}$/'))
+        user_id: Joi.string().length(10).required().pattern(new RegExp('^[0-9]{9}[A-Z]$'))
             .messages({
                 "string.empty": "ID should not be empty!",
                 "string.length": `ID should be exactly {#limit} characters!`,
                 "string.required": "ID is required!",
-                "string.pattern.base": "ID form invalid... Ex:- 123456789A"
+                "string.pattern.base": "ID form invalid... Ex:- 123456789D"
             }),
     })
 
@@ -114,12 +114,12 @@ const password_validation = (data) => {
 
 const get_user_validation = (data) => {
     const schema = Joi.object({
-        user_id: Joi.string().length(10).required().pattern(new RegExp('/^[0-9]{9}.[A-Z]{1}$/'))
+        user_id: Joi.string().length(10).required().pattern(new RegExp('^[0-9]{9}[A-Z]$'))
             .messages({
                 "string.empty": "ID should not be empty!",
                 "string.length": `ID should be exactly {#limit} characters!`,
                 "string.required": "ID is required!",
-                "string.pattern.base": "ID form invalid... Ex:- 123456789A"
+                "string.pattern.base": "ID form invalid... Ex:- 123456789D"
             }),
     })
 
@@ -322,12 +322,12 @@ const confirm_test_validation = (data) => {
 
 const user_id_validation = (data) => {
     const schema = Joi.object({
-        user_id: Joi.string().length(10).required().pattern(new RegExp('/^[0-9]{9}.[A-Z]{1}$/'))
+        user_id: Joi.string().length(10).required().pattern(new RegExp('^[0-9]{9}[A-Z]$'))
             .messages({
                 "string.empty": "ID should not be empty!",
                 "string.length": `ID should be exactly {#limit} characters!`,
                 "string.required": "ID is required!",
-                "string.pattern.base": "ID form invalid... Ex:- 123456789A"
+                "string.pattern.base": "ID form invalid... Ex:- 123456789D"
             }),
     })
 
