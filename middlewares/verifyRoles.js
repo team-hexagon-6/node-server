@@ -14,6 +14,7 @@ const verifyRole = (...allowedRoles) => {
 
 
         if (!isAllow) {
+            console.log("not allowed role")
             return res.status(401).json({
                 message: "Unauthorized request user not allowed"
             });

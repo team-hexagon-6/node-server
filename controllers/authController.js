@@ -232,7 +232,7 @@ const getAuthObject = async (auth) => {
         active: auth.active,
         logged_at: auth.logged_at,
         complete_profile: auth.complete_profile,
-        role: allowedRoles[userType.name],
+        role: allowedRoles[userType.slug],
     }
 }
 
