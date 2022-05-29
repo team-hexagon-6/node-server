@@ -26,6 +26,7 @@ const verifyJWT = (req, res, next) => {
             req.user_id = decoded.user_id;
             req.user_type = decoded.user_type;
             req.role = decoded.role;
+            req.complete_profile = decoded.complete_profile;
             console.log('JWT verified...');
             console.log("decoded :", decoded)
             next();
