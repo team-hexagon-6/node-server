@@ -4,31 +4,31 @@ const testRecords =[
     {
         test_id:'',
         test_result_id:1,
-        examiner_id:"23334343E",
+        examiner_id:"190000002E",
         test_type_id:1,
     },
     {
         test_id:'',
         test_result_id:1,
-        examiner_id:"23334343E",
+        examiner_id:"190000002E",
         test_type_id:0,
     },
     {
         test_id:'',
         test_result_id:0,
-        examiner_id:"23334343E",
+        examiner_id:"190000005E",
         test_type_id:1,
     },
     {
         test_id:'',
         test_result_id:0,
-        examiner_id:"23334343E",
+        examiner_id:"190000005E",
         test_type_id:1,
     },
     {
         test_id:'',
         test_result_id:0,
-        examiner_id:"23334343E",
+        examiner_id:"190000008E",
         test_type_id:1,
     },
 ]

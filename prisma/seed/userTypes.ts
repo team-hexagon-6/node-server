@@ -1,14 +1,14 @@
 export const userTypes = [
     {
-        name: 'admin',
+        name: 'Admin',
         slug: 'ad_slug',
     },
     {
-        name: 'examiner',
+        name: 'Examiner',
         slug: 'ex_slug',
     },
     {
-        name: 'doctor',
+        name: 'Doctor',
         slug: 'do_slug',
     }
 ]
