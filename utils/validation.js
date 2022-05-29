@@ -27,7 +27,7 @@ const register_vaidation = (data) => {
 
 const login_validation = (data) => {
     const schema = Joi.object({
-        user_id: Joi.string().length(10).required().pattern(new RegExp('/^[0-9]{9}.[A-Z]{1}$/'))
+        user_id: Joi.string().length(10).required().pattern(new RegExp('^[0-9]{9}[A-Z]$'))
             .messages({
                 "string.empty": "ID should not be empty!",
                 "string.length": `ID should be exactly {#limit} characters!`,

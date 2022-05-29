@@ -118,6 +118,7 @@ const handleLogin = async (req, res) => {
         },
         data: {
             refresh_token,
+            logged_at: new Date()
         }
     });
 
