@@ -6,6 +6,7 @@ const validate = require('../utils/validation');
 // functions 
 const getDoctors = async (req, res) => {
     const DOCTOR_SLUG = process.env.DOCTOR_USER_TYPE_SLUG;
+
     if (!DOCTOR_SLUG) {
         console.log("DOCTOR_USER_TYPE_SLUG is not set");
         return res.status(500).json({ "message": "Internal server error" });
