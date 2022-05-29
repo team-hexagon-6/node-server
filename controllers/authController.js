@@ -10,15 +10,17 @@ const allowedRoles = require('../config/allowedRoles');
 
 // functions 
 const handleNewUser = async (req, res) => {
-    const { employee_id: user_id, employee_type: user_type, password } = req.body;
+    const { employee_id: user_id, employee_type: user_type } = req.body;
 
-    const result = validate.register_vaidation({ user_id, user_type, password });
+    const result = validate.register_vaidation({ user_id, user_type });
     if (result?.error) {
         console.log("error :", result.error);
         return res.status(400).json({
             "message": result.error.details
         });
     }
+
+
 
     const duplicateUser = await prisma.Auth.findUnique({
         where: {
@@ -30,6 +32,8 @@ const handleNewUser = async (req, res) => {
         return res.status(409).json({ "message": `User :${user_id} already exists...` });
     }
 
+    const password = user_id + '@V1pd';
+    console.log("password :", password);
     try {
         const hashedPwd = await bcrypt.hash(password, 10);
 
@@ -102,8 +106,6 @@ const handleLogin = async (req, res) => {
         return res.status(400).json({ "message": `User :${user_id} password is incorrect...` });
     }
 
-    // console.log(foundUser)
-    // if(foundUser.active)
 
     const authObject = await getAuthObject(auth);
 

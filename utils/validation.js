@@ -18,7 +18,6 @@ const register_vaidation = (data) => {
                 "string.max": `Field should have at most {#limit} characters!`,
                 "string.required": "Field is required!"
             }),
-        password: password_joi_object(),
 
         user_type: Joi.string().max(10).required()
             .messages({
