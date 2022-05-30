@@ -155,6 +155,7 @@ const handleNewAccessToken = async (req, res) => {
     });
 
     if (!auth) {
+        console.log("invalid refresh token :", refresh_token);
         return res.status(403).json({ "message": "Invalid token" });
     }
 
