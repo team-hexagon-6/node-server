@@ -313,7 +313,12 @@ const updateUserByUser = async (req, res) => {
                 nic: nic,
                 contact_no: contact_no,
                 email: email,
-                birthday: new Date(birthday)
+                birthday: new Date(birthday),
+                auth: {
+                    update: {
+                        complete_profile: true
+                    }
+                }
             }
         });
 
