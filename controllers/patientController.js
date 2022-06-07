@@ -10,21 +10,23 @@ const getGenderType = async (req, res) => {
         }
     });
     console.log(genders)
-    if(genders.length <= 0)
+    if (genders.length <= 0)
         return res.status(500).json({
-            "message" : "Gender types not found"
+            "message": "Gender types not found"
         })
     return res.status(200).json({
-            "message": `Successfully sent gender types`
-        })
+        "message": `Successfully sent gender types`,
+        data: genders
+    })
 }
 
-const addNewPatient = async(req, res) =>{
-    const {patient_id, firstname, lastname, nic, contact_no, email, birthday, gender_type} = req.body;
+const addNewPatient = async (req, res) => {
+    const { patient_id, firstname, lastname, nic, contact_no, email, birthday, gender_type } = req.body;
     // const patient_id = req.patient_id;
 
-    const result = validate.new_patient_validation({firstname, lastname, nic, contact_no, email, birthday});
+    const result = validate.new_patient_validation({ firstname, lastname, nic, contact_no, email, birthday });
     if (result?.error) {
+        console.log(result.error.details)
         return res.status(400).json({
             "message": result.error.details
         });
@@ -36,10 +38,10 @@ const addNewPatient = async(req, res) =>{
         }
     });
 
-    try{
-        if(duplicatePatient){
-            return res.status(409).json({"message": `Patient :${patient_id} already exists...`});
-        
+    try {
+        if (duplicatePatient) {
+            return res.status(409).json({ "message": `Patient :${patient_id} already exists...` });
+
         }
 
         const genderType = await prisma.GenderType.findUnique({
@@ -47,9 +49,10 @@ const addNewPatient = async(req, res) =>{
                 slug: gender_type
             }
         });
-        
-        if(!genderType){
-            return res.status(400).json({ "message": `Gender type :${gender_type} does not exist...`});
+
+        if (!genderType) {
+            console.log("gender type not exits")
+            return res.status(400).json({ "message": `Gender type :${gender_type} does not exist...` });
         }
         console.log("gender type", gender_type);
 
@@ -65,62 +68,59 @@ const addNewPatient = async(req, res) =>{
                 gender_type_id: genderType.id
             }
         })
-        
+
         console.log("new patient", newPatient);
-        res.status(201).json({ 'message' : `new patient ${patient_id} added successfully...!`})
-    }catch(error){
+        res.status(201).json({
+            'message': `new patient ${patient_id} added successfully...!`
+        })
+    } catch (error) {
         console.log(error.message)
         res.status(500).json({ "message": "Internal server error" });
     }
 }
 
-// const getAllPatients = async (req, res) => {
-//     const { skip, take } = req.query;
-//     const validation = validate.skip_take_validation({ skip, take });
+const getAllPatients = async (req, res) => {
+    const { skip, take } = req.query;
+    const validation = validate.skip_take_validation({ skip, take });
 
-//     if (validation?.error) {
-//         return res.status(400).json({
-//             "message": validation.error.details
-//         });
-//     }
+    if (validation?.error) {
+        return res.status(400).json({
+            "message": validation.error.details
+        });
+    }
 
-//     try {
-//         const userTypesIDs = await prisma.UserType.findMany({
-//             where: {
-//                 name: {
-//                     in: ['examiner', 'doctor']
-//                 }
-//             },
-//             select: {
-//                 id: true
-//             },
-//             skip: parseInt(skip),
-//             take: parseInt(take)
-//         });
-//         // console.log(userTypesIDs)
-//         // console.log()
-//         const employees = await prisma.User.findMany({
-//             where: {
-//                 auth: {
-//                     user_type_id: {
-//                         in: userTypesIDs.map(userType => userType.id)
-//                     }
-//                 }
-//             },
-//         });
-//         // console.log(employees)
-//         return res.status(200).json({
-//             status: 'success',
-//             data: employees
-//         })
-//     } catch (error) {
-//         console.log(error)
-//         return res.status(500).json({
-//             status: 'error',
-//             message: error.message
-//         })
-//     }
-// }
+    try {
+        const patients = await prisma.Patient.findMany({
+            select: {
+                id: true,
+                firstname: true,
+                lastname: true,
+                nic: true,
+                contact_no: true,
+                email: true,
+                birthday: true,
+                gender_type: true
+            },
+            skip: parseInt(skip),
+            take: parseInt(take)
+        });
+
+        const totalItems = await prisma.Patient.count();
+
+        console.log(patients);
+        return res.status(200).json({
+            status: 'success',
+            data: patients,
+            total_items: totalItems
+        })
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({
+            status: 'error',
+            message: error.message
+        })
+    }
+}
 
 const getPatient = async (req, res) => {
     try {
@@ -154,9 +154,77 @@ const getPatient = async (req, res) => {
     }
 }
 
+const updatePatient = async(req, res) => {
+    const{patient_id, firstname, lastname, nic, contact_no, email, birthday, gender_type} = req.body;
+    // const patient_id = req.patient_id;
+
+    const validation = validate.update_patient_validation({firstname, lastname, nic, contact_no, email, birthday});
+
+    if (validation.error) {
+        return res.status(400).json({
+            "message": validation.error.details
+        });
+    }
+    const foundPatient = await prisma.Patient.findUnique({
+        where: {
+            id: patient_id
+        },
+    });
+
+    if (!foundPatient) {
+        return res.status(404).json({
+            "message": `Patient :${patient_id} does not exist...`
+        });
+    }
+
+
+    const genderType = await prisma.GenderType.findUnique({
+        where: {
+            slug: gender_type
+        }
+    });
+
+    if (!genderType) {
+        console.log("gender type not exits")
+        return res.status(400).json({ "message": `Gender type :${gender_type} does not exist...` });
+    }
+
+    try{
+        const updatePatient = await prisma.Patient.update({
+            where: {
+                id: patient_id
+            },
+            data: {
+                firstname: firstname,
+                lastname: lastname,
+                nic: nic,
+                contact_no: contact_no,
+                email: email,
+                birthday: new Date(birthday),
+                gender_type_id: genderType.id
+            }
+        });
+
+        console.log(updatePatient)
+
+        return res.status(200).json({
+            status: 'success',
+            data: updatePatient
+        });
+    }catch(error){
+        console.log(error)
+        return res.status(500).json({
+            status: 'error',
+            message: error.message
+        });
+    }
+}
+
 
 module.exports = {
     getGenderType,
     addNewPatient,
-    getPatient
+    getPatient,
+    getAllPatients,
+    updatePatient
 }

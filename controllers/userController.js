@@ -6,12 +6,13 @@ const validate = require('../utils/validation');
 // functions 
 const getDoctors = async (req, res) => {
     const DOCTOR_SLUG = process.env.DOCTOR_USER_TYPE_SLUG;
+
     if (!DOCTOR_SLUG) {
         console.log("DOCTOR_USER_TYPE_SLUG is not set");
         return res.status(500).json({ "message": "Internal server error" });
     }
 
-    const { skip, take } = req.query;
+    const { skip, take, search_by } = req.query;
     const validation = validate.skip_take_validation({ skip, take });
 
     if (validation?.error) {
@@ -21,42 +22,31 @@ const getDoctors = async (req, res) => {
     }
 
     try {
-        const doctors = await prisma.User.findMany({
-            where: {
-                auth: {
-                    usertype: {
-                        slug: DOCTOR_SLUG
-                    }
+        let WHERE = {
+            auth: {
+                usertype: {
+                    slug: DOCTOR_SLUG
                 }
-            },
-            select: {
-                firstname: true,
-                lastname: true,
-                nic: true,
-                contact_no: true,
-                email: true,
-                birthday: true,
-                created_at: true,
-                auth: {
-                    select: {
-                        id: true,
-                        logged_at: true,
-                        complete_profile: true,
-                        usertype: {
-                            select: {
-                                name: true,
-                            }
-                        }
-                    }
-                }
-            },
-            skip: parseInt(skip),
-            take: parseInt(take)
-        });
+            }
+        }
+
+        if (search_by) {
+            WHERE = {
+                ...WHERE,
+                user_id: search_by
+            }
+        }
+
+        const doctors = await getUsers(skip, take, WHERE)
+
+        const totalItems = await prisma.User.count({
+            where: WHERE
+        })
 
         return res.status(200).json({
             status: 'success',
-            data: doctors
+            data: doctors,
+            total_items: totalItems
         })
     }
     catch (error) {
@@ -75,7 +65,7 @@ const getExaminers = async (req, res) => {
         return res.status(500).json({ "message": "Internal server error" });
     }
 
-    const { skip, take } = req.query;
+    const { skip, take, search_by } = req.query;
 
     const validation = validate.skip_take_validation({ skip, take });
 
@@ -85,43 +75,36 @@ const getExaminers = async (req, res) => {
         });
     }
 
+    console.log("search by :", search_by)
+
     try {
-        const examiners = await prisma.User.findMany({
-            where: {
-                auth: {
-                    usertype: {
-                        slug: EXAMINER_SLUG
-                    }
+        let WHERE = {
+            auth: {
+                usertype: {
+                    slug: EXAMINER_SLUG
                 }
-            },
-            select: {
-                firstname: true,
-                lastname: true,
-                nic: true,
-                contact_no: true,
-                email: true,
-                birthday: true,
-                created_at: true,
-                auth: {
-                    select: {
-                        id: true,
-                        logged_at: true,
-                        complete_profile: true,
-                        usertype: {
-                            select: {
-                                name: true,
-                            }
-                        }
-                    }
-                }
-            },
-            skip: parseInt(skip),
-            take: parseInt(take)
-        });
+            }
+        }
+
+        if (search_by) {
+            WHERE = {
+                ...WHERE,
+                user_id: search_by
+            }
+        }
+
+        console.log("where :", WHERE)
+
+        const examiners = await getUsers(skip, take, WHERE)
+
+        const totalItems = await prisma.User.count({
+            where: WHERE
+        })
 
         return res.status(200).json({
             status: 'success',
-            data: examiners
+            data: examiners,
+            total_items: totalItems
         })
     }
     catch (error) {
@@ -133,6 +116,36 @@ const getExaminers = async (req, res) => {
     }
 }
 
+const getUsers = (skip, take, WHERE) => {
+
+    return prisma.User.findMany({
+        where: WHERE,
+        select: {
+            firstname: true,
+            lastname: true,
+            nic: true,
+            contact_no: true,
+            email: true,
+            birthday: true,
+            created_at: true,
+            auth: {
+                select: {
+                    id: true,
+                    logged_at: true,
+                    complete_profile: true,
+                    active: true,
+                    usertype: {
+                        select: {
+                            name: true,
+                        }
+                    }
+                }
+            }
+        },
+        skip: parseInt(skip),
+        take: parseInt(take)
+    });
+}
 
 const getAllEmpoyees = async (req, res) => {
     const SLUG = process.env.ADMIN_USER_TYPE_SLUG;
@@ -264,6 +277,7 @@ const updateUserByUser = async (req, res) => {
     const validation = validate.update_user_validation({ firstname, lastname, nic, contact_no, email, birthday });
 
     if (validation.error) {
+        console.log(validation.error.details);
         return res.status(400).json({
             "message": validation.error.details
         });
@@ -278,10 +292,11 @@ const updateUserByUser = async (req, res) => {
     const foundUser = await prisma.User.findUnique({
         where: {
             user_id: user_id
-        }
+        },
     });
 
     if (!foundAuth || !foundUser) {
+        console.log(validation.error.details);
         return res.status(404).json({
             "message": `User :${user_id} does not exist...`
         });
@@ -298,7 +313,12 @@ const updateUserByUser = async (req, res) => {
                 nic: nic,
                 contact_no: contact_no,
                 email: email,
-                birthday: new Date(birthday)
+                birthday: new Date(birthday),
+                auth: {
+                    update: {
+                        complete_profile: true
+                    }
+                }
             }
         });
 
@@ -439,6 +459,20 @@ const getUser = async (req, res) => {
     const foundUser = await prisma.User.findUnique({
         where: {
             user_id: user_id
+        },
+        include: {
+            auth: {
+                select: {
+                    complete_profile: true,
+                    logged_at: true,
+                    active: true,
+                    usertype: {
+                        select: {
+                            name: true
+                        }
+                    }
+                }
+            }
         }
     });
 
@@ -454,6 +488,52 @@ const getUser = async (req, res) => {
     });
 }
 
+const activateDeactivateUser = async (req, res) => {
+    const user_id = req.body.user_id;
+
+    const validation = validate.user_id_validation({ user_id });
+
+    if (validation.error) {
+        return res.status(400).json({
+            "message": validation.error.details
+        });
+    }
+
+    const foundUser = await prisma.Auth.findUnique({
+        where: {
+            id: user_id
+        }
+    });
+
+    if (!foundUser) {
+        return res.status(404).json({
+            "message": `User :${user_id} does not exist...`
+        })
+    }
+
+    try {
+        const result = await prisma.Auth.update({
+            where: {
+                id: user_id
+            },
+            data: {
+                active: !foundUser.active,
+                refresh_token: null,
+            }
+        })
+
+        return res.status(200).json({
+            status: 'success',
+            data: result
+        })
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({
+            status: 'error',
+        })
+    }
+}
+
 module.exports = {
     getAllEmpoyees,
     getEmployee,
@@ -463,4 +543,5 @@ module.exports = {
     getUser,
     getDoctors,
     getExaminers,
+    activateDeactivateUser
 }

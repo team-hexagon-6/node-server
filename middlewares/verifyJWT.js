@@ -9,8 +9,9 @@ const verifyJWT = (req, res, next) => {
 
 
     if (!authHeader?.startsWith('Bearer ')) {
+        console.log('Invalid token VERIFYJWT : ', authHeader);
         return res.status(401).json({
-            "message": "Invalid token"
+            "message": "Unauthorized"
         });
     }
 
@@ -19,12 +20,13 @@ const verifyJWT = (req, res, next) => {
     jwt.verify(token,
         process.env.ACCESS_TOKEN_SECRET,
         (err, decoded) => {
-            if (err) return res.status(401).json({
+            if (err) return res.status(403).json({
                 "message": "Invalid token"
             });
             req.user_id = decoded.user_id;
             req.user_type = decoded.user_type;
             req.role = decoded.role;
+            req.profile_complete = decoded.profile_complete;
             console.log('JWT verified...');
             console.log("decoded :", decoded)
             next();

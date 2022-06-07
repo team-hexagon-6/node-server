@@ -6,9 +6,9 @@ const verifyJWT = require('../middlewares/verifyJWT');
 
 
 router
-    .post('/register', verifyJWT, verifyRoles(process.env.ADMIN_ROLE), authController.handleNewUser)
     .post('/login', authController.handleLogin)
     .get('/logout', authController.handleLogout)
+    .post('/register', verifyJWT, verifyRoles(process.env.ADMIN_ROLE), authController.handleNewUser)
     .get('/new-token', authController.handleNewAccessToken)
     .get('/user-types', verifyJWT, verifyRoles(process.env.ADMIN_ROLE), authController.getUserTypes);
 

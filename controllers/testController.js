@@ -143,8 +143,6 @@ const doTest = async (req, res) => {
             "message": 'Internal server error...'
         });
     }
-
-
 }
 
 const handlenNewTestRecord = async (data, test_id, examiner_id, patient_id, testType) => {
@@ -175,16 +173,23 @@ const handlenNewTestRecord = async (data, test_id, examiner_id, patient_id, test
 }
 
 const getTest = async (req, res) => {
-    console.log("params : ", req.params)
+    // console.log("params : ", req.params)
     const { test_id } = req.params;
 
-    const validation = validate.get_test_validation({ test_id });
+    const validation = validate.test_id_validation({ test_id });
 
     if (validation?.error) {
         return res.status(400).json({
             "message": validation.error.details
         });
     }
+
+    const totalItems = await prisma.Test.count({
+        where: {
+            id: test_id
+        }
+    });
+
 
     const test = await prisma.Test.findUnique({
         where: {
@@ -213,9 +218,12 @@ const getTest = async (req, res) => {
                             name: true
                         }
                     },
+                },
+                orderBy: {
+                    id: 'desc'
                 }
             }
-        }
+        },
     });
 
     if (!test) {
@@ -226,7 +234,8 @@ const getTest = async (req, res) => {
 
     return res.status(200).json({
         "message": 'success',
-        "test": test
+        "test": test,
+        total_items: totalItems
     });
 }
 
@@ -261,10 +270,19 @@ const getAllTestsForPatient = async (req, res) => {
         })
     }
 
+    // FIXME: try more efficient way to get count
+    const totalItems = await prisma.Test.count({
+        where: {
+            patient_id: patient_id
+        }
+    });
 
     const tests = await prisma.Test.findMany({
         where: {
             patient_id: patient_id
+        },
+        orderBy: {
+            created_at: 'desc'
         },
         skip: parseInt(skip),
         take: parseInt(take)
@@ -272,7 +290,8 @@ const getAllTestsForPatient = async (req, res) => {
 
     return res.status(200).json({
         "message": 'success',
-        "tests": tests
+        "tests": tests,
+        total_items: totalItems
     });
 }
 
@@ -338,6 +357,7 @@ const getAllTestRecords = async (req, res) => {
     });
 }
 
+// FIXME:try do it in efficient way 
 const handleViewTestRecords = async (test_records) => {
     const testTypes = await prisma.TestType.findMany();
     const testResultTypes = await prisma.TestResult.findMany();
@@ -373,6 +393,57 @@ const getTestTypes = async (req, res) => {
     });
 }
 
+const confirmTest = async (req, res) => {
+    const { test_id, patient_id } = req.body;
+
+    const validation = validate.confirm_test_validation({ test_id, patient_id });
+
+    if (validation?.error) {
+        return res.status(400).json({
+            "message": validation.error.details
+        });
+    }
+
+
+    const foundTest = await prisma.Test.findUnique({
+        where: {
+            id: test_id,
+        }
+    });
+
+    if (!foundTest) {
+        return res.status(400).json({
+            "message": `Test :${test_id} does not exist...`
+        });
+    }
+
+    if (foundTest.patient_id !== patient_id) {
+        return res.status(400).json({
+            "message": 'Patient does not match...'
+        });
+    }
+
+    if (foundTest.confirmed) {
+        return res.status(400).json({
+            "message": `Test :${test_id} already confirmed...`
+        });
+    }
+
+    const confirmedTest = await prisma.Test.update({
+        where: {
+            id: test_id
+        },
+        data: {
+            confirmed: true
+        }
+    });
+    console.log("test confirmation :", confirmedTest);
+
+    return res.status(200).json({
+        "message": 'success',
+        "test": confirmedTest
+    });
+}
 
 const mappingTypes = (typesArray) => {
     const mapObject = {};
@@ -392,5 +463,6 @@ module.exports = {
     getAllTestsForPatient,
     getTestRecord,
     getAllTestRecords,
-    getTestTypes
+    getTestTypes,
+    confirmTest
 }

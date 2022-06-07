@@ -1,21 +1,173 @@
 
 export const auths =[
     {
-        id:"23334343A",
+        id:"190000001A",
         user_type_id:1,
         password:"$2b$10$vn9AzLGJP9imTSOErEW.lOaSbvxReIJKwNJK6E4JIPlLUawJlDjmO",
         complete_profile: true,
     },
     {
-        id:"23334343E",
+        id:"190000002E",
         user_type_id:2,
         password:"$2b$10$vn9AzLGJP9imTSOErEW.lOaSbvxReIJKwNJK6E4JIPlLUawJlDjmO",
         complete_profile: true,
     },
     {
-        id:"23334343D",
+        id:"190000003D",
         user_type_id:3,
         password:"$2b$10$vn9AzLGJP9imTSOErEW.lOaSbvxReIJKwNJK6E4JIPlLUawJlDjmO",
         complete_profile: true,
-    }
+    },
+    // 
+    {
+        id:"190000004D",
+        user_type_id:3,
+        password:"$2b$10$vn9AzLGJP9imTSOErEW.lOaSbvxReIJKwNJK6E4JIPlLUawJlDjmO",
+        complete_profile: true,
+    },
+    {
+        id:"190000005E",
+        user_type_id:2,
+        password:"$2b$10$vn9AzLGJP9imTSOErEW.lOaSbvxReIJKwNJK6E4JIPlLUawJlDjmO",
+        complete_profile: true,
+    },
+    {
+        id:"190000006D",
+        user_type_id:3,
+        password:"$2b$10$vn9AzLGJP9imTSOErEW.lOaSbvxReIJKwNJK6E4JIPlLUawJlDjmO",
+        complete_profile: true,
+    },
+    {
+        id:"190000007D",
+        user_type_id:3,
+        password:"$2b$10$vn9AzLGJP9imTSOErEW.lOaSbvxReIJKwNJK6E4JIPlLUawJlDjmO",
+        complete_profile: true,
+    },
+    {
+        id:"190000008E",
+        user_type_id:2,
+        password:"$2b$10$vn9AzLGJP9imTSOErEW.lOaSbvxReIJKwNJK6E4JIPlLUawJlDjmO",
+        complete_profile: true,
+    },
+    {
+        id:"190000009D",
+        user_type_id:3,
+        password:"$2b$10$vn9AzLGJP9imTSOErEW.lOaSbvxReIJKwNJK6E4JIPlLUawJlDjmO",
+        complete_profile: true,
+    },
+    {
+        id:"190000010D",
+        user_type_id:3,
+        password:"$2b$10$vn9AzLGJP9imTSOErEW.lOaSbvxReIJKwNJK6E4JIPlLUawJlDjmO",
+        complete_profile: true,
+    },
+    {
+        id:"190000011D",
+        user_type_id:3,
+        password:"$2b$10$vn9AzLGJP9imTSOErEW.lOaSbvxReIJKwNJK6E4JIPlLUawJlDjmO",
+        complete_profile: true,
+    },
+    {
+        id:"190000012D",
+        user_type_id:3,
+        password:"$2b$10$vn9AzLGJP9imTSOErEW.lOaSbvxReIJKwNJK6E4JIPlLUawJlDjmO",
+        complete_profile: true,
+    },
+    {
+        id:"190000013E",
+        user_type_id:2,
+        password:"$2b$10$vn9AzLGJP9imTSOErEW.lOaSbvxReIJKwNJK6E4JIPlLUawJlDjmO",
+        complete_profile: true,
+    },
+    {
+        id:"190000014E",
+        user_type_id:2,
+        password:"$2b$10$vn9AzLGJP9imTSOErEW.lOaSbvxReIJKwNJK6E4JIPlLUawJlDjmO",
+        complete_profile: true,
+    },
+    {
+        id:"190000015D",
+        user_type_id:3,
+        password:"$2b$10$vn9AzLGJP9imTSOErEW.lOaSbvxReIJKwNJK6E4JIPlLUawJlDjmO",
+        complete_profile: true,
+    },
+    {
+        id:"190000016D",
+        user_type_id:3,
+        password:"$2b$10$vn9AzLGJP9imTSOErEW.lOaSbvxReIJKwNJK6E4JIPlLUawJlDjmO",
+        complete_profile: true,
+    },
+    {
+        id:"190000017D",
+        user_type_id:3,
+        password:"$2b$10$vn9AzLGJP9imTSOErEW.lOaSbvxReIJKwNJK6E4JIPlLUawJlDjmO",
+        complete_profile: true,
+    },
+    {
+        id:"190000018D",
+        user_type_id:3,
+        password:"$2b$10$vn9AzLGJP9imTSOErEW.lOaSbvxReIJKwNJK6E4JIPlLUawJlDjmO",
+        complete_profile: true,
+    },
+    {
+        id:"190000019D",
+        user_type_id:3,
+        password:"$2b$10$vn9AzLGJP9imTSOErEW.lOaSbvxReIJKwNJK6E4JIPlLUawJlDjmO",
+        complete_profile: true,
+    },
+    {
+        id:"190000020D",
+        user_type_id:3,
+        password:"$2b$10$vn9AzLGJP9imTSOErEW.lOaSbvxReIJKwNJK6E4JIPlLUawJlDjmO",
+        complete_profile: true,
+    },
+    {
+        id:"190000021D",
+        user_type_id:3,
+        password:"$2b$10$vn9AzLGJP9imTSOErEW.lOaSbvxReIJKwNJK6E4JIPlLUawJlDjmO",
+        complete_profile: true,
+    },
+    {
+        id:"190000022D",
+        user_type_id:3,
+        password:"$2b$10$vn9AzLGJP9imTSOErEW.lOaSbvxReIJKwNJK6E4JIPlLUawJlDjmO",
+        complete_profile: true,
+    },
+    //
+    {
+        id:"190000023E",
+        user_type_id:2,
+        password:"$2b$10$vn9AzLGJP9imTSOErEW.lOaSbvxReIJKwNJK6E4JIPlLUawJlDjmO",
+        complete_profile: true,
+    },
+    {
+        id:"190000024E",
+        user_type_id:2,
+        password:"$2b$10$vn9AzLGJP9imTSOErEW.lOaSbvxReIJKwNJK6E4JIPlLUawJlDjmO",
+        complete_profile: true,
+    },
+    {
+        id:"190000025E",
+        user_type_id:2,
+        password:"$2b$10$vn9AzLGJP9imTSOErEW.lOaSbvxReIJKwNJK6E4JIPlLUawJlDjmO",
+        complete_profile: true,
+    },
+    {
+        id:"190000026E",
+        user_type_id:2,
+        password:"$2b$10$vn9AzLGJP9imTSOErEW.lOaSbvxReIJKwNJK6E4JIPlLUawJlDjmO",
+        complete_profile: true,
+    },
+    {
+        id:"190000027E",
+        user_type_id:2,
+        password:"$2b$10$vn9AzLGJP9imTSOErEW.lOaSbvxReIJKwNJK6E4JIPlLUawJlDjmO",
+        complete_profile: true,
+    },
+    {
+        id:"190000028E",
+        user_type_id:2,
+        password:"$2b$10$vn9AzLGJP9imTSOErEW.lOaSbvxReIJKwNJK6E4JIPlLUawJlDjmO",
+        complete_profile: true,
+    },
 ]

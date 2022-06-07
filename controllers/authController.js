@@ -3,21 +3,24 @@ const bcrypt = require('bcrypt');
 const prisma = require('../config/client');
 const validate = require('../utils/validation');
 const token = require('../utils/token');
+const jwt = require('jsonwebtoken');
 
 const allowedRoles = require('../config/allowedRoles');
 
 
 // functions 
 const handleNewUser = async (req, res) => {
-    const { employee_id: user_id, employee_type: user_type, password } = req.body;
+    const { employee_id: user_id, employee_type: user_type } = req.body;
 
-    const result = validate.register_vaidation({ user_id, user_type, password });
+    const result = validate.register_vaidation({ user_id, user_type });
     if (result?.error) {
         console.log("error :", result.error);
         return res.status(400).json({
             "message": result.error.details
         });
     }
+
+
 
     const duplicateUser = await prisma.Auth.findUnique({
         where: {
@@ -29,6 +32,8 @@ const handleNewUser = async (req, res) => {
         return res.status(409).json({ "message": `User :${user_id} already exists...` });
     }
 
+    const password = user_id + '@V1pd';
+    console.log("password :", password);
     try {
         const hashedPwd = await bcrypt.hash(password, 10);
 
@@ -101,8 +106,6 @@ const handleLogin = async (req, res) => {
         return res.status(400).json({ "message": `User :${user_id} password is incorrect...` });
     }
 
-    // console.log(foundUser)
-    // if(foundUser.active)
 
     const authObject = await getAuthObject(auth);
 
@@ -115,12 +118,13 @@ const handleLogin = async (req, res) => {
         },
         data: {
             refresh_token,
+            logged_at: new Date()
         }
     });
 
     console.log(result)
 
-    res.cookie('jwt', refresh_token, { httpOnly: true, sameSite: 'None', maxAge: 24 * 60 * 60 * 1000 });
+    res.cookie('jwt', refresh_token, { httpOnly: true, secure: true, sameSite: 'None', maxAge: 24 * 60 * 60 * 1000 });
     return res.status(200).json({
         "message": "Login successful",
         "access_token": access_token,
@@ -129,9 +133,16 @@ const handleLogin = async (req, res) => {
 }
 
 const handleNewAccessToken = async (req, res) => {
+    console.log("requesting new access token");
+
     const cookies = req.cookies;
+    // const cookies = req.cookies;
+    console.log("cookiee value :", cookies);
+
 
     if (!cookies?.jwt) {
+        console.log("invalid refresh token :", cookies?.jwt);
+
         return res.status(401).json({ "message": "Invalid token" });
     }
 
@@ -144,6 +155,7 @@ const handleNewAccessToken = async (req, res) => {
     });
 
     if (!auth) {
+        console.log("invalid refresh token :", refresh_token);
         return res.status(403).json({ "message": "Invalid token" });
     }
 
@@ -156,14 +168,16 @@ const handleNewAccessToken = async (req, res) => {
             console.log('decoded ', decoded);
             console.log('auth ', auth);
             if (err || auth.user_id !== decoded.user_id) {
+                console.log("requesting new access token failed invalid token")
                 return res.status(403).json({ "message": "Invalid token" });
             }
 
+            // FIXME: check if need to update refresh token also
             const access_token = token.getAccessToken(authObject);
+            console.log("new access token getting sucessfully")
             return res.status(200).json({
                 "message": "Refresh token successful",
                 "access_token": access_token,
-
             });
         })
 }
@@ -171,6 +185,7 @@ const handleNewAccessToken = async (req, res) => {
 const handleLogout = async (req, res) => {
     // const { user_id } = req.body;
     const cookies = req.cookies;
+    console.log("cookiee value :", cookies);
 
     if (!cookies?.jwt) {
         return res.status(204).json({ "message": "No token found" });
@@ -218,7 +233,7 @@ const getAuthObject = async (auth) => {
         active: auth.active,
         logged_at: auth.logged_at,
         complete_profile: auth.complete_profile,
-        role: allowedRoles[userType.name],
+        role: allowedRoles[userType.slug],
     }
 }
 
